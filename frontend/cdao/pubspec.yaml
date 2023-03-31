@@ -1,0 +1,33 @@
+name: cdao
+description: From Farm 2 Connoisseur
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.19.5 <3.0.0'
+dependencies:
+  flutter:
+    sdk: flutter
+  email_validator: ^2.1.17
+  cupertino_icons: ^1.0.2
+  firebase_core: ^2.4.0
+  firebase_storage: ^11.0.5
+  firebase_database: ^10.0.7
+  cloud_firestore: ^4.0.5
+  provider: ^6.0.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+flutter:
+  uses-material-design: true
+  assets:
+    - lib/assets/images/
+  fonts:
+    - family: SaintMartyr
+      fonts:
+        - asset: lib/assets/fonts/saint-martyr-font/SaintMartyr-L39rg.otf
+        - asset: lib/assets/fonts/saint-martyr-font/SaintMartyr3D-ax10x.otf
+    - family: Alonira
+      fonts:
+        - asset: lib/assets/fonts/alonira/Alonira.ttf
