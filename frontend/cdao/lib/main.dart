@@ -1,14 +1,18 @@
+import 'dart:js';
+
 import 'package:cdao/providers/firebasertdb_service.dart';
 import 'package:cdao/providers/firestore_service.dart';
 import 'package:cdao/providers/storage_service.dart';
-import 'package:cdao/screens/earlySignUp.dart';
-import 'package:cdao/screens/home.dart';
+import 'package:cdao/routes/route_config.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+// ignore: depend_on_referenced_packages
+import 'package:flutter_web_plugins/url_strategy.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  usePathUrlStrategy();
   await Firebase.initializeApp(
     options: const FirebaseOptions(
       apiKey: "AIzaSyAzL8860aWxxrUyeV45RBnIicLGaVPRz7g",
@@ -18,15 +22,22 @@ void main() async {
       storageBucket: "coffee-dao.appspot.com",
       messagingSenderId: "890475915685",
       appId: "1:890475915685:web:dd9f6e950b056f571e604c"
-),
+    ),
   );
+    // Load the lucid-cardano module
+    // context.callMethod('import', ['https://unpkg.com/lucid-cardano@0.10.1/web/mod.js']).then((_) {
+    // Call a function from the module
+    // var lucid = context['lucid_cardano'];
+    // var result = lucid.someFunction();
+    // print(result);
+    // });
 
   runApp(const CDAO()
       // EasyLocalization(
       //   supportedLocales: const [Locale('en', ''), Locale('es', '')],
       //   path: 'lib/assets/translations',
       //   fallbackLocale: const Locale('en', ''),
-      //   child: const DPA())
+      //   child: const CDAO())
       );
 }
 
@@ -43,7 +54,7 @@ class CDAO extends StatelessWidget {
       ).copyWith(
         secondary: Colors.blueGrey,
       ),
-      textTheme: const TextTheme(bodyText2: TextStyle(color: Colors.white)),
+      textTheme: const TextTheme(bodyMedium: TextStyle(color: Colors.white)),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: TextButton.styleFrom(
           backgroundColor: Colors.orange,
@@ -62,26 +73,26 @@ class CDAO extends StatelessWidget {
       ),
     );
     return MultiProvider(
-            providers: [
-                Provider<FirestoreService>(
-                  create: (context) => FirestoreService(),
-                ),
-                Provider<StorageService>(
-                  create: (context) => StorageService(),
-                ),
-                Provider<DB>(
-                  create: (context) => DB(),
-                ),
-              ],
-            child:  MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Coffee DAO',
-          theme: themeData,
-          home: const EarlySignUpScreen(),
-          routes: {
-            HomeScreen.routeName: (ctx) => const HomeScreen(),
-            EarlySignUpScreen.routeName: (ctx) => const EarlySignUpScreen(),
-          }),
+      providers: [
+        Provider<FirestoreService>(
+          create: (context) => FirestoreService(),
+        ),
+        Provider<StorageService>(
+          create: (context) => StorageService(),
+        ),
+        ChangeNotifierProvider<DB>(
+          create: (context) => DB(),
+        ),
+      ],
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        // routerConfig: CDAORouter.returnRouter(),
+        routeInformationParser:
+            CDAORouter.returnRouter().routeInformationParser,
+        routerDelegate: CDAORouter.returnRouter().routerDelegate,
+        title: 'Coffee DAO',
+        theme: themeData,
+      )
     );
   }
 }

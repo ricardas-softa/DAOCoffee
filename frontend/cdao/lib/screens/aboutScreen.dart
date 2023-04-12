@@ -2,15 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../widgets/common/title.dart';
 
-class HomeScreen extends StatefulWidget {
-  static const routeName = '/home';
-  const HomeScreen({Key? key}) : super(key: key);
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
+class AboutScreen extends StatelessWidget {
+  const AboutScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

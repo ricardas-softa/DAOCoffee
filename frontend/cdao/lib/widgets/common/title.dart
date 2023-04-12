@@ -12,6 +12,7 @@ class _TitleWidgetState extends State<TitleWidget> {
   @override
   Widget build(BuildContext context) {
     final Gradient gradient = LinearGradient(colors: [
+      const Color.fromARGB(255, 1, 207, 183),
       Colors.orange,
       Colors.red.shade900,
     ]);

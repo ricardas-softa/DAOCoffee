@@ -71,26 +71,38 @@ class Text1 extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 40,
-            color: Colors.deepOrange
+            color: Color.fromRGBO(249, 94, 32, 1),
           ),
         ),
         const SizedBox(height: 10,),
-        const Text(
-          '''With Blockchain Backed Proof Of Orgin''',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20, color: Colors.cyanAccent),
+        RichText(
+          text: const TextSpan(
+            text: 'CARDANO ',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Color.fromARGB(255, 1, 207, 183),
+              fontSize: 20
+              ),
+            children: <TextSpan>[
+              TextSpan(text: ' Backed Proof Of Origin', 
+              style: TextStyle(
+                color: Colors.white,
+              fontSize: 20
+              )),
+            ],
+          ),
         ),
         const SizedBox(height: 10,),
         const Text(
           '''Coming Soon!''',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20, color: Colors.red),
+          style: TextStyle(fontSize: 20, color:Color.fromRGBO(249, 94, 32, 1),),
         ),
         const SizedBox(height: 10,),
         const Text(
           '''Sign Up To Stay Notified.''',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20, color: Colors.yellow),
+          style: TextStyle(fontSize: 20, color:Color.fromRGBO(249, 94, 32, 1)),
         ),
         const EmailInputField(),
       ],
