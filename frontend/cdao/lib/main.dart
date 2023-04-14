@@ -24,13 +24,6 @@ void main() async {
       appId: "1:890475915685:web:dd9f6e950b056f571e604c"
     ),
   );
-    // Load the lucid-cardano module
-    // context.callMethod('import', ['https://unpkg.com/lucid-cardano@0.10.1/web/mod.js']).then((_) {
-    // Call a function from the module
-    // var lucid = context['lucid_cardano'];
-    // var result = lucid.someFunction();
-    // print(result);
-    // });
 
   runApp(const CDAO()
       // EasyLocalization(

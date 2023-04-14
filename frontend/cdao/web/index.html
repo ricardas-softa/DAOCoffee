@@ -40,22 +40,24 @@
   <script src="flutter.js" defer></script>
 </head>
 <body>
+  <script type="module" src="node_modules/lucid-cardano/web/mod.js"></script>
+
+  <!-- <script src="main.dart.js" type="application/javascript"></script> -->
   <script>
-    import { Lucid } from "https://unpkg.com/lucid-cardano@0.10.1/web/mod.js"
-    window.addEventListener('load', function(ev) {
+    window.addEventListener("load", function (ev) {
       // Download main.dart.js
       _flutter.loader.loadEntrypoint({
         serviceWorker: {
           serviceWorkerVersion: serviceWorkerVersion,
         },
-        onEntrypointLoaded: function(engineInitializer) {
-          engineInitializer.initializeEngine().then(function(appRunner) {
+        onEntrypointLoaded: function (engineInitializer) {
+          engineInitializer.initializeEngine().then(function (appRunner) {
             appRunner.runApp();
           });
-        }
+        },
       });
     });
-    
   </script>
 </body>
 </html>
+

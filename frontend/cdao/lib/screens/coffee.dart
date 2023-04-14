@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'dart:js' as js;
 
+import '../services/lucid_service.dart';
 import '../widgets/common/title.dart';
 import '../widgets/farm/farmHeader.dart';
 
@@ -87,7 +89,9 @@ class CoffeeScreen extends StatelessWidget {
                       // shipping info form
                       // walllet connector button
                       ElevatedButton(
-                          onPressed: () => print('Wallet Conector'),
+                          onPressed: () async {
+                            await LucidService.connectNamiWallet();
+                          },
                           child: const Text('Purchase')),
                       // purchase status field
                       // error message field
