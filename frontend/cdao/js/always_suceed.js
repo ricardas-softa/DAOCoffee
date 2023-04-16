@@ -19,11 +19,11 @@ import {
   */
   
   const lucid = await Lucid.new(
-    new Blockfrost("https://cardano-preview.blockfrost.io/api/v0", "<projectId>"),
-    "Preview"
+    new Blockfrost("https://cardano-preview.blockfrost.io/api/v0", "preprodDCAbR2aBq5Od7CNzTtApdSKrS04CYUM9"),
+    "Preprod"
   );
   
-  const api = await window.cardano.nami.enable();
+  const api = await window.cardano.nami.enable().then();
   // Assumes you are in a browser environment
   lucid.selectWallet(api);
   

@@ -59,7 +59,7 @@ class CoffeeScreen extends StatelessWidget {
                       ),
                       // description of the projecct
                       const Text(
-                          ''' Description of the project: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.''',
+                          ''' CoffeeDAO is an initiative to attach an NFT into each coffee bag sold on our platform. This provides consumers with the origin of the coffee, characteristics of the coffee, and the artistic process used in  the production by the grower. For producers, it creates a record of the consistent quality of their product and a direct link with the coffee drinkers that buy their coffee.''',
                           textAlign: TextAlign.center,),
                        SizedBox(
                         height: boxH,
