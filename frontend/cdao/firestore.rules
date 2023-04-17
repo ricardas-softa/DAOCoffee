@@ -1,0 +1,11 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /earlySignUpEmail {
+    	allow write;
+    }
+    match /{document=**} {
+      allow read;
+    }
+  }
+}

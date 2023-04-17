@@ -20,6 +20,15 @@
   ],
   "hosting": {
     "public": "build/web",
+    "headers": [ 
+      {
+        "source": "gs://coffee-dao.appspot.com",
+        "headers": [ {
+          "key": "Cache-Control",
+          "value": "max-age=7200"
+        } ]
+      }
+    ],
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -31,5 +40,12 @@
         "destination": "/index.html"
       }
     ]
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "storage": {
+    "rules": "storage.rules"
   }
 }

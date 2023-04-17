@@ -20,7 +20,7 @@ class FarmHeader extends StatelessWidget {
       children: <Widget>[
         Container(
           alignment: Alignment.center,
-          child: Image.asset('lib/assets/images/coffee_picking_crew_1.png',
+          child: Image.asset('lib/assets/images/header.png',
             // height: 250,
             width: mWidth,
             fit: BoxFit.contain,

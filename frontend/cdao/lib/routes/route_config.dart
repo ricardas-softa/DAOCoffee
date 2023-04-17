@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../screens/aboutScreen.dart';
-import '../screens/coffee.dart';
+import '../screens/farms/losHornos/losHornos.dart';
 import '../screens/contactScreen.dart';
 import '../screens/homeScreen.dart';
 
@@ -41,10 +41,10 @@ class CDAORouter {
           },
         ),
         GoRoute(
-          name: CDAOConstants.coffeeRoute,
-          path: '/coffee', // '/profile/:farmname/:offerings/:coffees/;coffee',
+          name: CDAOConstants.losHornosRoute,
+          path: '/losHornos', // '/profile/:farmname/:offerings/:coffees/;coffee',
           pageBuilder: (context, state) {
-            return const MaterialPage(child: CoffeeScreen());
+            return const MaterialPage(child: LosHornosScreen());
           },
         ),
       ],
