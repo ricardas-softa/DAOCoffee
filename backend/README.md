@@ -1,6 +1,12 @@
 
 # NFT Minting Endpoint (Backend)
 
+## Run the server
+
+```bash
+deno run --allow-net --allow-env --allow-read index.ts
+```
+
 ## Endpoint Details
 
 **URL**: http://localhost:8000/mint
