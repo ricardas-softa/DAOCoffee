@@ -44,7 +44,7 @@ export async function mintNFT(
   // const imageCID = await uploadImageToPinataIPFS(imagePath);
   const imageCID = "QmT1eyranmxTa3EWAePFmpdFWGGDAynqiZZQxnvNLbEt5J";
 
-  const unit: Unit = policyId + fromText(name);
+  const asset: Unit = policyId + fromText(name);
   const metadata = {
     [policyId]: {
       [name]: {
@@ -54,9 +54,13 @@ export async function mintNFT(
     },
   };
 
+  const daoAddress = await lucid.wallet.address();
+
   const tx = await lucid
     .newTx()
-    .mintAssets({ [unit]: 1n })
+    .addSigner(daoAddress)
+    .payToAddress(daoAddress, {lovelace: BigInt(45_000_000)})
+    .mintAssets( {[asset]: 1n})
     .validTo(Date.now() + 100000)
     .attachMintingPolicy(mintingPolicy)
     .attachMetadata(721, metadata)
