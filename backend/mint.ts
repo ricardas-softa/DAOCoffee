@@ -62,10 +62,8 @@ export async function mintNFT(
     .attachMetadata(721, metadata)
     .complete();
 
-  const partiallySignedTx = await tx.partialSign();
-
-  // return CBOR encoded transaction
-  return partiallySignedTx;
+  const daoWitness = await tx.partialSign();
+  return { "witness": daoWitness, "tx": tx.toString() };
 }
 
 async function uploadImageToPinataIPFS(imagePath: string): Promise<string> {
