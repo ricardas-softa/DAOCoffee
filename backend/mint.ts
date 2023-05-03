@@ -9,6 +9,8 @@ import {
           toHex,
           fromText,
           cbor,
+          Data,
+          Constr,
         } from "./deps.ts";
 import { PINATA_API_KEY, PINATA_SECRET_KEY, BLOCKFROST_PROJ, MNEMONIC } from "./env.ts";
 
@@ -45,6 +47,7 @@ export async function mintNFT(
   const imageCID = "QmT1eyranmxTa3EWAePFmpdFWGGDAynqiZZQxnvNLbEt5J";
 
   const asset: Unit = policyId + fromText(name);
+
   const metadata = {
     [policyId]: {
       [name]: {
@@ -56,11 +59,13 @@ export async function mintNFT(
 
   const daoAddress = await lucid.wallet.address();
 
+  const MintAction = () => Data.to(new Constr(0, []));
+
   const tx = await lucid
     .newTx()
     .addSigner(daoAddress)
     .payToAddress(daoAddress, {lovelace: BigInt(45_000_000)})
-    .mintAssets( {[asset]: 1n})
+    .mintAssets( {[asset]: 1n}, MintAction())
     .validTo(Date.now() + 100000)
     .attachMintingPolicy(mintingPolicy)
     .attachMetadata(721, metadata)
