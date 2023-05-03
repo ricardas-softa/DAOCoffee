@@ -6,22 +6,22 @@ class StorageService {
   StorageService();
   final _storage = FirebaseStorage.instance;
 
-  Future<List<String>> getCaresoleDownloadURLs({required String farmName}) async {
+  Future<List<String>> getCaresoleDownloadURLs(
+      {required String farmName}) async {
     List<String> urlList = [];
     final storageRef = _storage.ref().child("farms/$farmName/carousel");
     final listResult = await storageRef.listAll();
+    print('4444444444 listResult ${listResult.toString()}');
+
     for (var prefix in listResult.prefixes) {
       print('4444444444 prefix $prefix');
       // The prefixes under storageRef.
       // You can call listAll() recursively on them.
     }
-    for (var item in listResult.items) {
-      print('4444444444 item $item');
-      urlList.add(
-        await _storage
-        .ref()
-        .child("farms/$farmName/carousel/$item")
-        .getDownloadURL());
+
+    for (Reference item in listResult.items) {
+      print('4444444444 item ${item.fullPath}');
+      urlList.add(await _storage.ref().child(item.fullPath).getDownloadURL());
     }
     return urlList;
   }

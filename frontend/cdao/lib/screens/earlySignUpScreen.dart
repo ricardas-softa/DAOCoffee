@@ -1,7 +1,7 @@
-import 'dart:html';
+// import 'dart:html';
 
 import 'package:flutter/material.dart';
-import 'package:email_validator/email_validator.dart';
+// import 'package:email_validator/email_validator.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../widgets/earlySignIn/emailInput.dart';
@@ -19,11 +19,11 @@ class EarlySignUpScreen extends StatelessWidget {
     var image = Image.asset('lib/assets/images/7.png');
     return Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        // appBar: AppBar(
-        //   backgroundColor: Colors.black,
-        //   // title: const TitleWWidget(),
-        //   centerTitle: true,
-        // ),
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+          // title: const TitleWWidget(),
+          centerTitle: true,
+        ),
         body: Center(
             child: SingleChildScrollView(
           child: Column(
@@ -75,22 +75,38 @@ class Text1 extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 10,),
-        RichText(
-          text: const TextSpan(
-            text: 'CARDANO ',
-            style: TextStyle(
+        // RichText(
+        //   text: const TextSpan(
+        //     text: 'CARDANO NFT',
+        //     style: TextStyle(
+        //       fontWeight: FontWeight.bold,
+        //       color: Color.fromARGB(255, 1, 207, 183),
+        //       fontSize: 20
+        //       ),
+        //     children: <TextSpan>[
+        //       TextSpan(text: ' Backed Proof Of Origin', 
+        //       style: TextStyle(
+        //         color: Colors.white,
+        //       fontSize: 20
+        //       )),
+        //     ],
+        //   ),
+        // ),
+        const SizedBox(height: 10,),
+        const Text(
+          '''CARDANO NFT''',
+          textAlign: TextAlign.center,
+          style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Color.fromARGB(255, 1, 207, 183),
-              fontSize: 20
-              ),
-            children: <TextSpan>[
-              TextSpan(text: ' Backed Proof Of Origin', 
-              style: TextStyle(
+              fontSize: 20),
+        ),
+        const Text(
+          '''Backed Proof Of Origin''',
+          textAlign: TextAlign.center,
+          style: TextStyle(
                 color: Colors.white,
-              fontSize: 20
-              )),
-            ],
-          ),
+              fontSize: 20),
         ),
         const SizedBox(height: 10,),
         const Text(
@@ -105,6 +121,15 @@ class Text1 extends StatelessWidget {
           style: TextStyle(fontSize: 20, color:Color.fromRGBO(249, 94, 32, 1)),
         ),
         const EmailInputField(),
+        const SizedBox(height: 10,),
+        const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text(
+            '''If you choose to provide us with your email address, we will use it only to send updates on the CoffeeDAO NFT project. If you choose to unsubscribe write to contact@nft-dao.org.''',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 10, color:Colors.white),
+          ),
+        ),
       ],
     );
   }

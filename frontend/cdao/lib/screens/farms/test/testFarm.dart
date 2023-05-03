@@ -1,29 +1,40 @@
-import 'dart:js_util';
-
+import 'package:cdao/providers/storage_service.dart';
 import 'package:flutter/material.dart';
-import 'package:js/js.dart';
 
-// import '../../../providers/lucid_service.dart';
-import '../../../widgets/common/orderFormDialog.dart';
+import '../../../providers/lucid_service.dart';
 import '../../../widgets/common/title.dart';
 import '../../../widgets/farm/FarmCarasole.dart';
 import '../../../widgets/farm/farmHeader.dart';
+// import '../../../widgets/farm/farmHeader.dart';
 
-class LosHornosScreen extends StatefulWidget {
-  const LosHornosScreen({super.key});
+class TestFarmScreen extends StatefulWidget {
+  const TestFarmScreen({super.key});
 
   @override
-  State<LosHornosScreen> createState() => _LosHornosScreenState();
+  State<TestFarmScreen> createState() => _TestFarmScreenState();
 }
 
-@JS()
-external purchaseBackStart();
+class _TestFarmScreenState extends State<TestFarmScreen> {
+  StorageService storage = StorageService();
+  // late String headerUrl;
+  // bool loaded = false;
+  // @override
+  // void initState() {
+  //   setup('losHornos');
+  //   super.initState();
+  // }
 
-class _LosHornosScreenState extends State<LosHornosScreen> {
+  // Future<void> setup(String farmName) async {
+  //   // var ref = _storage.ref().child("farms/$farmName/carousel/header.png");
+  //   headerUrl = await storage.getHeaderDownloadURLs(farmName: 'losHornos');
+  //   loaded = true;
+  //   setState(() {});
+  //   return;
+  // }
+
   @override
   Widget build(BuildContext context) {
     double mWidth = MediaQuery.of(context).size.width;
-    double mHeight = MediaQuery.of(context).size.height;
     double boxH = 20;
     final Gradient gradient = LinearGradient(colors: [
       // const Color.fromARGB(255, 1, 207, 183),
@@ -48,9 +59,7 @@ class _LosHornosScreenState extends State<LosHornosScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  FarmHeader(
-                    farmName: 'losHornos',
-                  ),
+                  FarmHeader(farmName: 'losHornos',),
                 ],
               ),
               Row(
@@ -59,7 +68,7 @@ class _LosHornosScreenState extends State<LosHornosScreen> {
                 children: [
                   SizedBox(
                     width: mWidth,
-                    height: mWidth / 3,
+                    height: mWidth/3,
                     child: FarmCarasole(
                       farmName: 'losHornos', // firebase storage farm name
                     ),
@@ -98,7 +107,7 @@ class _LosHornosScreenState extends State<LosHornosScreen> {
                       SizedBox(
                         height: boxH,
                       ),
-                      // TODO: update coffee bag image
+                      // coffee bag image
                       Image.asset(
                         'lib/assets/images/Coffee-Packaging.jpg',
                         width: mWidth / 5,
@@ -106,7 +115,7 @@ class _LosHornosScreenState extends State<LosHornosScreen> {
                       SizedBox(
                         height: boxH,
                       ),
-                      // TODO: update short description of the purchasing process
+                      // short description of the purchasing process
                       const Text(
                         ''' Description of the purchasing process: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.''',
                         textAlign: TextAlign.center,
@@ -121,28 +130,11 @@ class _LosHornosScreenState extends State<LosHornosScreen> {
                       SizedBox(
                         height: boxH,
                       ),
-
-                      // TODO: check if any coffee is left befor showing button
+                      // shipping info form
+                      // walllet connector button
                       ElevatedButton(
                           onPressed: () async {
-                            await showDialog(
-                                context: context,
-                                builder: (_) {
-                                  return Dialog(
-                                    backgroundColor: Colors.black,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: SizedBox(
-                                        height: mHeight,
-                                        width: mWidth / 3,
-                                        child: const OrderFormDialog()),
-                                  );
-                                });
-                            // TODO: shipping info form Name, Address, Quantity, Phone# ?
-                            // show dialog form trigger purchase froom form
-                            // String result = await purchases();
-                            // TODO: if tx suceeds increase bags sold and enter the customers info from form into db
+                            await LucidService.connectNamiWallet();
                           },
                           child: const Text('Purchase')),
                       // purchase status field
@@ -154,16 +146,3 @@ class _LosHornosScreenState extends State<LosHornosScreen> {
         ));
   }
 }
-
-//   Future<String> purchases() async {
-//     // var obj=  await  promiseToFuture(js.context.callMethod('alwaysSucceed'));
-//     // js.JsObject obj=  await promiseToFuture(js.context.callMethod('alwaysSucceed'));
-//     var promise = purchaseBackStart();
-//     var obj = await promiseToFuture(promise);
-//     print(obj.toString());
-//     return obj.toString();
-//   }
-// }
-// TODO: User order status
-// TODO: User NFT Viewer
-// TODO: User Managment

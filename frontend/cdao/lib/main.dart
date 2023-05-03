@@ -13,8 +13,11 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   usePathUrlStrategy();
+  // Dev
   await Firebase.initializeApp(
-    options: const FirebaseOptions(
+    options: 
+    // Dev 
+    const FirebaseOptions(
       apiKey: "AIzaSyAzL8860aWxxrUyeV45RBnIicLGaVPRz7g",
       authDomain: "coffee-dao.firebaseapp.com",
       databaseURL: "https://coffee-dao-default-rtdb.firebaseio.com",
@@ -23,6 +26,17 @@ void main() async {
       messagingSenderId: "890475915685",
       appId: "1:890475915685:web:dd9f6e950b056f571e604c"
     ),
+    // Production
+      // const FirebaseOptions(
+      //     apiKey: "AIzaSyBUfmBtzriy9I4Y4FeJPvSpKwsgnf4fdAs",
+      //     authDomain: "coffee-dao-org.firebaseapp.com",
+      //     databaseURL: "https://coffee-dao-org-default-rtdb.firebaseio.com",
+      //     projectId: "coffee-dao-org",
+      //     storageBucket: "coffee-dao-org.appspot.com",
+      //     messagingSenderId: "231845900167",
+      //     appId: "1:231845900167:web:b7c4f9ed35a7bf1f27ed22",
+      //     measurementId: "G-X3G1PP11HD"
+      //   ),
   );
 
   runApp(const CDAO()

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirestoreService {
@@ -18,6 +19,36 @@ class FirestoreService {
       return value;
     });
     return 'Contact Sent';
+  }
+  
+  Future<bool> sendOrderForm({
+    required String name,
+    required String email,
+    required String street1,
+    required String? street2,
+    required String city,
+    required String state,
+    required int zip,
+    required int quantity
+  }) async {
+    CollectionReference ordersReff = firestore.collection('orders');
+    int randomNumber =  Random().nextInt(100000);
+    bool err = false;
+    await ordersReff.doc(randomNumber.toString()).set(
+      {
+        name: name,
+        email: email,
+        street1: street1,
+        street2: street2,
+        city: city,
+        state: state,
+        zip: zip,
+        quantity: quantity
+      },
+    ).catchError((err) {
+      err = true;
+    });
+    return err;
   }
 
   Future<String> earlySignUpEmail(

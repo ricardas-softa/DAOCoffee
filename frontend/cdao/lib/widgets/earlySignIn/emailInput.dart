@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/firebasertdb_service.dart';
-import '../../providers/firestore_service.dart';
 
 class EmailInputField extends StatefulWidget {
   const EmailInputField({super.key});
@@ -13,11 +12,11 @@ class EmailInputField extends StatefulWidget {
 }
 
 class _EmailInputFieldState extends State<EmailInputField> {
+  String? email1;
+  String? errorMessage;
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    String? email1;
-    String? errorMessage;
-    final _formKey = GlobalKey<FormState>();
     double width = MediaQuery.of(context).size.width;
     return Consumer<DB>(builder: (context, db, child) {
       return Column(
@@ -53,10 +52,8 @@ class _EmailInputFieldState extends State<EmailInputField> {
                               errorMessage = 'Please enter some text';
                             });
                             return 'Please enter some text';
-                          }
-                          if (value.isNotEmpty) {
-                            final bool isValid = EmailValidator.validate(value);
-                            if (!isValid) {
+                          } else {
+                            if (!EmailValidator.validate(value)) {
                               setState(() {
                                 email1 = null;
                                 errorMessage = 'Please enter a valid email';
@@ -69,7 +66,6 @@ class _EmailInputFieldState extends State<EmailInputField> {
                               return null;
                             }
                           }
-                          return null;
                         },
                       ),
                     ],
