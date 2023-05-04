@@ -12,7 +12,7 @@ import {
           Data,
           Constr,
         } from "./deps.ts";
-import { PINATA_API_KEY, PINATA_SECRET_KEY, BLOCKFROST_PROJ, MNEMONIC } from "./env.ts";
+import { PINATA_API_KEY, PINATA_SECRET_KEY, BLOCKFROST_PROJ, MNEMONIC, DAO_ADDRESS } from "./env.ts";
 
 const lucid = await Lucid.new(
   new Blockfrost("https://cardano-preprod.blockfrost.io/api/v0", BLOCKFROST_PROJ),
@@ -57,14 +57,14 @@ export async function mintNFT(
     },
   };
 
-  const daoAddress = await lucid.wallet.address();
+  const daoCoffeeSigningAddress = await lucid.wallet.address();
 
   const MintAction = () => Data.to(new Constr(0, []));
 
   const tx = await lucid
     .newTx()
-    .addSigner(daoAddress)
-    .payToAddress(daoAddress, {lovelace: BigInt(45_000_000)})
+    .addSigner(daoCoffeeSigningAddress)
+    .payToAddress(DAO_ADDRESS, {lovelace: BigInt(45_000_000)})
     .mintAssets( {[asset]: 1n}, MintAction())
     .validTo(Date.now() + 100000)
     .attachMintingPolicy(mintingPolicy)

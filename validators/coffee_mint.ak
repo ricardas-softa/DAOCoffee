@@ -31,14 +31,14 @@ validator {
                  fn(output) {
                    expect VerificationKeyCredential(hash) =
                      output.address.payment_credential
-                   hash == #"fdd6ea004ba7efee8a464b384b6e43114936cb7b12e244144b790b0c"
+                   hash == #"5032b71b5b54ab728a9e8a7ffd9e722e7349fd275d001105c5eedadb"
                  },
                )
             |> list.foldr(fn(a, b) { value.lovelace_of(a.value) + b }, 0)
         let must_be_signed =
           list.has(
             transaction.extra_signatories,
-            #"fe0af408d6cc27c24ce7b38264af5d41efd42ed89bdea5105b0da65b",
+            #"12c15099b30cd9d50f0b917f6b87acc47b62b4c6952ceb7bef91b922",
           )
         must_mint_before_deadline(transaction.validity_range, 1690848000000) && value_paid == 45000000 && must_be_signed && amount == 1
       }
