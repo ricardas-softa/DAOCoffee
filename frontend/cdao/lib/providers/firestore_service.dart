@@ -29,7 +29,7 @@ class FirestoreService {
     required String city,
     required String state,
     required int zip,
-    required int quantity
+    // required int quantity
   }) async {
     CollectionReference ordersReff = firestore.collection('orders');
     int randomNumber =  Random().nextInt(100000);
@@ -43,7 +43,7 @@ class FirestoreService {
         city: city,
         state: state,
         zip: zip,
-        quantity: quantity
+        // quantity: quantity
       },
     ).catchError((err) {
       err = true;

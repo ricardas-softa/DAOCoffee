@@ -19,17 +19,17 @@ class OrderFormDialog extends StatefulWidget {
 }
 
 @JS()
-external purchaseBackStart();
+external purchaseFrontStart();
 
 class _OrderFormDialogState extends State<OrderFormDialog> {
-  late String _name;
-  late String _email;
-  late String _street1;
-  late String? _street2;
-  late String _city;
-  late String _state;
-  late int _zip;
-  late int _quantity;
+  // String _name = "Test";
+  // String _email = "test@test.com";
+  // String _street1 = "Test";
+  // String? _street2;
+  // String _city = "Test";
+  // String _state = "NM";
+  // int _zip = 87104;
+  // late int _quantity;
   String _err = '';
   bool _isSubmitting = false;
   final _formKey = GlobalKey<FormState>();
@@ -39,17 +39,25 @@ class _OrderFormDialogState extends State<OrderFormDialog> {
 
   @override
   Widget build(BuildContext context) {
+    String name = "Test";
+    String email = "test@test.com";
+    String street1 = "Test";
+    String? street2;
+    String city = "Test";
+    String state = "NM";
+    int zip = 87104;
     // TODO: add quantity
     Future<String> purchases() async {
       // var obj=  await  promiseToFuture(js.context.callMethod('alwaysSucceed'));
       // js.JsObject obj=  await promiseToFuture(js.context.callMethod('alwaysSucceed'));
-      var promise = purchaseBackStart();
+      var promise = purchaseFrontStart();
       var obj = await promiseToFuture(promise);
       print(obj.toString());
       return obj.toString();
     }
 
     Future<void> _submitOrderForm() async {
+      // print('email $state');
       _isSubmitting = true;
       var firestore = Provider.of<FirestoreService>(context, listen: false);
       final isValid = _formKey.currentState!.validate();
@@ -59,14 +67,15 @@ class _OrderFormDialogState extends State<OrderFormDialog> {
         String result = await purchases();
         if (result != 'fail') {
           bool dbErr = await firestore.sendOrderForm(
-              name: _name,
-              email: _email,
-              street1: _street1,
-              street2: _street2,
-              city: _city,
-              state: _state,
-              zip: _zip,
-              quantity: _quantity);
+            name: name,
+            email: email,
+            street1: street1,
+            street2: street2,
+            city: city,
+            state: state,
+            zip: zip,
+            // quantity: _quantity
+          );
           if (dbErr) {
             setState(() {
               _err =
@@ -110,191 +119,191 @@ class _OrderFormDialogState extends State<OrderFormDialog> {
                     style: const TextStyle(color: Colors.red),
                   ),
                 //quantity
-                TextFormField(
-                  key: const ValueKey('quantity'),
-                  autocorrect: false,
-                  textCapitalization: TextCapitalization.none,
-                  enableSuggestions: false,
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value!.isEmpty ||
-                        int.parse(value) <= 0 ||
-                        int.parse(value) > 5000 ||
-                        !isNumeric(value)) {
-                      String e =
-                          'Please enter a the number of bags of coffee and NFTs you woould like.';
-                      setState(() {
-                        _err = e;
-                        _isSubmitting = false;
-                      });
-                      return e;
-                    }
-                    return null;
-                  },
-                  decoration: const InputDecoration(
-                    labelText: 'Quantity of coffee bags you uwouuld like.',
-                  ),
-                  onSaved: (value) {
-                    _quantity = int.parse(value!);
-                  },
-                ),
+                // TextFormField(
+                //   key: const ValueKey('quantity'),
+                //   autocorrect: false,
+                //   textCapitalization: TextCapitalization.none,
+                //   enableSuggestions: false,
+                //   keyboardType: TextInputType.number,
+                //   validator: (value) {
+                //     if (value!.isEmpty ||
+                //         int.parse(value) <= 0 ||
+                //         int.parse(value) > 5000 ||
+                //         !isNumeric(value)) {
+                //       String e =
+                //           'Please enter a the number of bags of coffee and NFTs you woould like.';
+                //       setState(() {
+                //         _err = e;
+                //         _isSubmitting = false;
+                //       });
+                //       return e;
+                //     }
+                //     return null;
+                //   },
+                //   decoration: const InputDecoration(
+                //     labelText: 'Quantity of coffee bags you uwouuld like.',
+                //   ),
+                //   onSaved: (value) {
+                //     _quantity = int.parse(value!);
+                //   },
+                // ),
                 // name
-                TextFormField(
-                  key: const ValueKey('name'),
-                  autocorrect: false,
-                  textCapitalization: TextCapitalization.none,
-                  enableSuggestions: false,
-                  keyboardType: TextInputType.text,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      String e = 'Please enter your name.';
-                      setState(() {
-                        _err = e;
-                        _isSubmitting = false;
-                      });
-                      return e;
-                    }
-                    return null;
-                  },
-                  decoration: const InputDecoration(
-                    labelText: 'Your Name',
-                  ),
-                  onSaved: (value) {
-                    _name = value!;
-                  },
-                ),
-                //email
-                TextFormField(
-                  key: const ValueKey('email'),
-                  autocorrect: false,
-                  textCapitalization: TextCapitalization.none,
-                  enableSuggestions: false,
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (value) {
-                    if (value!.isEmpty || !EmailValidator.validate(value)) {
-                      String e = 'Please enter a valid email address.';
-                      setState(() {
-                        _err = e;
-                        _isSubmitting = false;
-                      });
-                      return e;
-                    }
-                    return null;
-                  },
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                  ),
-                  onSaved: (value) {
-                    _email = value!;
-                  },
-                ),
-                //street1
-                TextFormField(
-                  key: const ValueKey('street1'),
-                  autocorrect: false,
-                  textCapitalization: TextCapitalization.none,
-                  enableSuggestions: false,
-                  keyboardType: TextInputType.streetAddress,
-                  // validator: (value) {
-                  //   if (value!.isEmpty || !EmailValidator.validate(value)) {
-                  //     return 'Please enter a valid email address.';
-                  //   }
-                  //   return null;
-                  // },
-                  decoration: const InputDecoration(
-                    labelText: 'Street Address',
-                  ),
-                  onSaved: (value) {
-                    _street1 = value!;
-                  },
-                ),
-                //street2
-                TextFormField(
-                  key: const ValueKey('street2'),
-                  autocorrect: false,
-                  textCapitalization: TextCapitalization.none,
-                  enableSuggestions: false,
-                  keyboardType: TextInputType.streetAddress,
-                  // validator: (value) {
-                  //   if (value!.isEmpty || !EmailValidator.validate(value)) {
-                  //     return 'Please enter a valid email address.';
-                  //   }
-                  //   return null;
-                  // },
-                  decoration: const InputDecoration(
-                    labelText: 'Street Address',
-                  ),
-                  onSaved: (value) {
-                    _street2 = value!;
-                  },
-                ),
-                //city
-                TextFormField(
-                  key: const ValueKey('city'),
-                  autocorrect: false,
-                  textCapitalization: TextCapitalization.none,
-                  enableSuggestions: false,
-                  keyboardType: TextInputType.text,
-                  // validator: (value) {
-                  //   if (value!.isEmpty || !EmailValidator.validate(value)) {
-                  //     return 'Please enter a valid email address.';
-                  //   }
-                  //   return null;
-                  // },
-                  decoration: const InputDecoration(
-                    labelText: 'City/Town',
-                  ),
-                  onSaved: (value) {
-                    _city = value!;
-                  },
-                ),
-                //state
-                TextFormField(
-                  key: const ValueKey('state'),
-                  autocorrect: false,
-                  textCapitalization: TextCapitalization.none,
-                  enableSuggestions: false,
-                  keyboardType: TextInputType.text,
-                  // validator: (value) {
-                  //   if (value!.isEmpty || !EmailValidator.validate(value)) {
-                  //     return 'Please enter a valid email address.';
-                  //   }
-                  //   return null;
-                  // },
-                  decoration: const InputDecoration(
-                    labelText: 'State ',
-                  ),
-                  onSaved: (value) {
-                    _state = value!;
-                  },
-                ),
-                //Zip
-                TextFormField(
-                  key: const ValueKey('zip'),
-                  autocorrect: false,
-                  textCapitalization: TextCapitalization.none,
-                  enableSuggestions: false,
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value!.isEmpty ||
-                        value.length != 5 ||
-                        !isNumeric(value)) {
-                      String e = 'Please enter a valid zip code.';
-                      setState(() {
-                        _err = e;
-                        _isSubmitting = false;
-                      });
-                      return e;
-                    }
-                    return null;
-                  },
-                  decoration: const InputDecoration(
-                    labelText: 'Zip Code',
-                  ),
-                  onSaved: (value) {
-                    _zip = int.parse(value!);
-                  },
-                ),
+                // TextFormField(
+                //   key: const ValueKey('name'),
+                //   autocorrect: false,
+                //   textCapitalization: TextCapitalization.none,
+                //   enableSuggestions: false,
+                //   keyboardType: TextInputType.text,
+                //   validator: (value) {
+                //     if (value!.isEmpty) {
+                //       String e = 'Please enter your name.';
+                //       setState(() {
+                //         _err = e;
+                //         _isSubmitting = false;
+                //       });
+                //       return e;
+                //     }
+                //     return null;
+                //   },
+                //   decoration: const InputDecoration(
+                //     labelText: 'Your Name',
+                //   ),
+                //   onSaved: (value) {
+                //     _name = value!;
+                //   },
+                // ),
+                // //email
+                // TextFormField(
+                //   key: const ValueKey('email'),
+                //   autocorrect: false,
+                //   textCapitalization: TextCapitalization.none,
+                //   enableSuggestions: false,
+                //   keyboardType: TextInputType.emailAddress,
+                //   validator: (value) {
+                //     if (value!.isEmpty || !EmailValidator.validate(value)) {
+                //       String e = 'Please enter a valid email address.';
+                //       setState(() {
+                //         _err = e;
+                //         _isSubmitting = false;
+                //       });
+                //       return e;
+                //     }
+                //     return null;
+                //   },
+                //   decoration: const InputDecoration(
+                //     labelText: 'Email',
+                //   ),
+                //   onSaved: (value) {
+                //     _email = value!;
+                //   },
+                // ),
+                // //street1
+                // TextFormField(
+                //   key: const ValueKey('street1'),
+                //   autocorrect: false,
+                //   textCapitalization: TextCapitalization.none,
+                //   enableSuggestions: false,
+                //   keyboardType: TextInputType.streetAddress,
+                //   // validator: (value) {
+                //   //   if (value!.isEmpty || !EmailValidator.validate(value)) {
+                //   //     return 'Please enter a valid email address.';
+                //   //   }
+                //   //   return null;
+                //   // },
+                //   decoration: const InputDecoration(
+                //     labelText: 'Street Address',
+                //   ),
+                //   onSaved: (value) {
+                //     _street1 = value!;
+                //   },
+                // ),
+                // //street2
+                // TextFormField(
+                //   key: const ValueKey('street2'),
+                //   autocorrect: false,
+                //   textCapitalization: TextCapitalization.none,
+                //   enableSuggestions: false,
+                //   keyboardType: TextInputType.streetAddress,
+                //   // validator: (value) {
+                //   //   if (value!.isEmpty || !EmailValidator.validate(value)) {
+                //   //     return 'Please enter a valid email address.';
+                //   //   }
+                //   //   return null;
+                //   // },
+                //   decoration: const InputDecoration(
+                //     labelText: 'Street Address',
+                //   ),
+                //   onSaved: (value) {
+                //     _street2 = value!;
+                //   },
+                // ),
+                // //city
+                // TextFormField(
+                //   key: const ValueKey('city'),
+                //   autocorrect: false,
+                //   textCapitalization: TextCapitalization.none,
+                //   enableSuggestions: false,
+                //   keyboardType: TextInputType.text,
+                //   // validator: (value) {
+                //   //   if (value!.isEmpty || !EmailValidator.validate(value)) {
+                //   //     return 'Please enter a valid email address.';
+                //   //   }
+                //   //   return null;
+                //   // },
+                //   decoration: const InputDecoration(
+                //     labelText: 'City/Town',
+                //   ),
+                //   onSaved: (value) {
+                //     _city = value!;
+                //   },
+                // ),
+                // //state
+                // TextFormField(
+                //   key: const ValueKey('state'),
+                //   autocorrect: false,
+                //   textCapitalization: TextCapitalization.none,
+                //   enableSuggestions: false,
+                //   keyboardType: TextInputType.text,
+                //   // validator: (value) {
+                //   //   if (value!.isEmpty || !EmailValidator.validate(value)) {
+                //   //     return 'Please enter a valid email address.';
+                //   //   }
+                //   //   return null;
+                //   // },
+                //   decoration: const InputDecoration(
+                //     labelText: 'State ',
+                //   ),
+                //   onSaved: (value) {
+                //     _state = value!;
+                //   },
+                // ),
+                // //Zip
+                // TextFormField(
+                //   key: const ValueKey('zip'),
+                //   autocorrect: false,
+                //   textCapitalization: TextCapitalization.none,
+                //   enableSuggestions: false,
+                //   keyboardType: TextInputType.number,
+                //   validator: (value) {
+                //     if (value!.isEmpty ||
+                //         value.length != 5 ||
+                //         !isNumeric(value)) {
+                //       String e = 'Please enter a valid zip code.';
+                //       setState(() {
+                //         _err = e;
+                //         _isSubmitting = false;
+                //       });
+                //       return e;
+                //     }
+                //     return null;
+                //   },
+                //   decoration: const InputDecoration(
+                //     labelText: 'Zip Code',
+                //   ),
+                //   onSaved: (value) {
+                //     _zip = int.parse(value!);
+                //   },
+                // ),
                 const SizedBox(height: 12),
                 _isSubmitting
                     ? const CircularProgressIndicator()
