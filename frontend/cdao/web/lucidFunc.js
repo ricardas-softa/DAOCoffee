@@ -1,3 +1,4 @@
+
 async function connectWallet () {
   try{
     console.log("connectWallet");
@@ -25,20 +26,17 @@ async function connectWallet () {
 }
 
 async function readValidator() {
-   const cd =  await import( './lucid-cardano/esm/src/mod.js');
+  const cd =  await import( './lucid-cardano/esm/src/mod.js');
   try{
-    console.log("readValidator2222");
     const response = await fetch("./plutus.json");
-    console.log("readValidator response", response);
       const jResp = await response.json();
-      // const jResp = JSON.parse(response);
       console.log("jResp", jResp);
       const validator = jResp
       .validators[0];
       console.log("validator", validator);
       return {
           type: "PlutusV2",
-          script: cd.toHex(cbor.encode(cd.fromHex(validator.compiledCode)))
+          script: validator.compiledCode //cd.toHex(cbw.cbor.encode(cd.fromHex(validator.compiledCode)))
       }
     } catch (e) {
      console.log("readValidator error ", e);
@@ -53,6 +51,7 @@ async function purchaseFrontStart() {
     if(cWallet=="Wallet not found"){
       return cWallet;
     }else{
+      const cd =  await import( './lucid-cardano/esm/src/mod.js');
       console.log("Wallet ", cWallet);
       const lucid = cWallet.l;
       console.log("await readValidator()");
@@ -66,7 +65,7 @@ async function purchaseFrontStart() {
       console.log("initiate purchase calling end point");
       const imageCID = "QmT1eyranmxTa3EWAePFmpdFWGGDAynqiZZQxnvNLbEt5J";
       const name = "AG21";
-      const asset = policyId + fromText(name);
+      const asset = policyId + cd.fromText(name);
     
       const metadata = {
         [policyId]: {
@@ -79,7 +78,7 @@ async function purchaseFrontStart() {
     
       // const userSigningAddress = await lucid.wallet.address();
     
-      const MintAction = () => Data.to(new Constr(0, []));
+      const MintAction = () => cd.Data.to(new cd.Constr(0, []));
     
       const tx = await lucid
         .newTx()
