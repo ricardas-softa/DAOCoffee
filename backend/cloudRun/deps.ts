@@ -8,13 +8,13 @@ export {
     // fromHex,
     // toHex,
     // fromText,
-} from "https://deno.land/x/lucid@0.9.7/mod.ts";
+} from "https://deno.land/x/lucid@0.10.3/mod.ts";
 export type {
     // MintingPolicy,
     // PolicyId,
     TxHash,
     // Unit,
     // Redeemer,
-} from "https://deno.land/x/lucid@0.9.7/mod.ts";
+} from "https://deno.land/x/lucid@0.10.3/mod.ts";
 // export * as cbor from "https://deno.land/x/cbor@v1.4.1/index.js";
 // export { config } from "https://deno.land/x/dotenv/mod.ts";

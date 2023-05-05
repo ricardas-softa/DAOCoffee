@@ -33,7 +33,7 @@ async function readValidator() {
       console.log("jResp", jResp);
       const validator = jResp
       .validators[0];
-      console.log("validator", validator);
+      console.log("validator.compiledCode", validator.compiledCode);
       return {
           type: "PlutusV2",
           script: validator.compiledCode //cd.toHex(cbw.cbor.encode(cd.fromHex(validator.compiledCode)))
@@ -91,18 +91,20 @@ async function purchaseFrontStart() {
         .complete();
     
       const userWitness = await tx.partialSign();
-
-      fetch('http://46.249.191.117:8000/mint', {
+      
+      fetch('http://localhost:8000/mint', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': 'http://46.249.191.117',
-            'Access-Control-Allow-Credentials': 'true'
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': 'true',
+            'Access-Control-Allow-Headers': 'X-Requested-With',
+            'Access-Control-Allow-Methods': 'GET, POST'
         },
         body: JSON.stringify({ 
           "name": "AG21",
-          "witness": userWitness,
+          "witness": userWitness, // .toString(), //  "witness": toHex(userWitness.to_bytes()),
           "tx": tx.toString(),
         })
       }).then(response => console.log(JSON.stringify(response)))
