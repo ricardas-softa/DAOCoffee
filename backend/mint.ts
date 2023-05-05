@@ -19,60 +19,77 @@ const lucid = await Lucid.new(
   "Preprod",
 );
 
-// Select the wallet from the mnemonic
-const mnemonic = MNEMONIC
-lucid.selectWalletFromSeed(mnemonic);
+// const buyerAddress = "addr_test1qrw3hy6rk6h99mtexatxfxq65hlf60dz7j8ptfp5zek4k0vdeyu5x5erv7ywncrvp9f0gsfwez704frfa8rawruemghslg9y2k";
+// lucid.selectWalletFrom({address:buyerAddress})
+// const [utxo] = await lucid.wallet.getUtxos();
+// console.log(utxo);
 
-const mintingPolicy = await readValidator();
+// const mintingPolicy = await readValidator();
 
-async function readValidator(): Promise<MintingPolicy> {
-  const validator = JSON.parse(await Deno.readTextFile("../plutus.json"))
-      .validators[0];
-  return {
-      type: "PlutusV2",
-      script: toHex(cbor.encode(fromHex(validator.compiledCode)))
-  }
-}
+// console.log(mintingPolicy);
 
-const policyId: PolicyId = lucid.utils.mintingPolicyToId(
-  mintingPolicy,
-);
+// async function readValidator(): Promise<MintingPolicy> {
+//   const validator = JSON.parse(await Deno.readTextFile("../plutus.json"))
+//       .validators[0];
+//   return {
+//       type: "PlutusV2",
+//       script: toHex(cbor.encode(fromHex(validator.compiledCode)))
+//   }
+// }
+
+// const policyId: PolicyId = lucid.utils.mintingPolicyToId(
+//   mintingPolicy,
+// );
 
 export async function mintNFT(
   name: string,
-  imagePath: string,
+  witness: string,
+  tx: string,
 ): Promise<TxHash> {
-  // Upload the image to Pinata IPFS and get its CID
-  // const imageCID = await uploadImageToPinataIPFS(imagePath);
-  const imageCID = "QmT1eyranmxTa3EWAePFmpdFWGGDAynqiZZQxnvNLbEt5J";
+  // // Upload the image to Pinata IPFS and get its CID
+  // // const imageCID = await uploadImageToPinataIPFS(imagePath);
+  // const imageCID = "QmT1eyranmxTa3EWAePFmpdFWGGDAynqiZZQxnvNLbEt5J";
 
-  const asset: Unit = policyId + fromText(name);
+  // const asset: Unit = policyId + fromText(name);
 
-  const metadata = {
-    [policyId]: {
-      [name]: {
-        name: name,
-        image: `ipfs://${imageCID}`,
-      },
-    },
-  };
+  // const metadata = {
+  //   [policyId]: {
+  //     [name]: {
+  //       name: name,
+  //       image: `ipfs://${imageCID}`,
+  //     },
+  //   },
+  // };
+
+  // const MintAction = () => Data.to(new Constr(0, []));
+
+  // const tx = await lucid
+  //   .newTx()
+  //   .addSigner(daoCoffeeSigningAddress)
+  //   // .collectFrom([utxo])
+  //   .payToAddress(DAO_ADDRESS, {lovelace: BigInt(45_000_000)})
+  //   .payToAddress(buyerAddress, {[asset]: 1n})
+  //   .mintAssets( {[asset]: 1n}, MintAction())
+  //   .validTo(Date.now() + 100000)
+  //   .attachMintingPolicy(mintingPolicy)
+  //   .attachMetadata(721, metadata)
+  //   .complete();
+
+  // const userWitness = await tx.partialSign();
+
+  // Select the wallet from the mnemonic
+  const mnemonic = MNEMONIC
+  lucid.selectWalletFromSeed(mnemonic);
+
+  // Deserialize the transaction
+  const txObj = lucid.fromTx(tx);
 
   const daoCoffeeSigningAddress = await lucid.wallet.address();
 
-  const MintAction = () => Data.to(new Constr(0, []));
-
-  const tx = await lucid
-    .newTx()
-    .addSigner(daoCoffeeSigningAddress)
-    .payToAddress(DAO_ADDRESS, {lovelace: BigInt(45_000_000)})
-    .mintAssets( {[asset]: 1n}, MintAction())
-    .validTo(Date.now() + 100000)
-    .attachMintingPolicy(mintingPolicy)
-    .attachMetadata(721, metadata)
-    .complete();
-
-  const daoWitness = await tx.partialSign();
-  return { "witness": daoWitness, "tx": tx.toString() };
+  const daoWitness = await txObj.partialSign();
+  const signedTx = txObj.assemble([daoWitness, witness]).complete();
+  const txHash = (await signedTx).submit();
+  return { "txHash": txHash };
 }
 
 async function uploadImageToPinataIPFS(imagePath: string): Promise<string> {
