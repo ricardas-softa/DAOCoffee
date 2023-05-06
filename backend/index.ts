@@ -14,8 +14,6 @@ router.post('/mint', async (context) => {
     context.response.body = await mintNFT(name, witness, tx);
 });
 
-
-
 app.use(router.routes());
 app.use(router.allowedMethods());
 
