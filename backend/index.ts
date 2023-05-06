@@ -11,8 +11,7 @@ const router = new Router();
 // Route for minting an NFT with name and imagePath
 router.post('/mint', async (context) => {
     const { name, witness, tx } = await context.request.body().value;
-    const txHash = await mintNFT(name, witness, tx);
-    context.response.body = txHash;
+    context.response.body = await mintNFT(name, witness, tx);
 });
 
 

@@ -36,7 +36,7 @@ async function readValidator() {
       console.log("validator.compiledCode", validator.compiledCode);
       return {
           type: "PlutusV2",
-          script: validator.compiledCode //cd.toHex(cbw.cbor.encode(cd.fromHex(validator.compiledCode)))
+          script: validator.compiledCode
       }
     } catch (e) {
      console.log("readValidator error ", e);
@@ -64,7 +64,7 @@ async function purchaseFrontStart() {
       // initiate purchase calling end point
       console.log("initiate purchase calling end point");
       const imageCID = "QmT1eyranmxTa3EWAePFmpdFWGGDAynqiZZQxnvNLbEt5J";
-      const name = "AG21";
+      const name = "NWO30";
       const asset = policyId + cd.fromText(name);
     
       const metadata = {
@@ -91,20 +91,20 @@ async function purchaseFrontStart() {
         .complete();
     
       const userWitness = await tx.partialSign();
-      
-      fetch('http://localhost:8000/mint', {
+      console.log("userWitness", userWitness)
+      fetch('https://cdao-mint-tm7praakga-uc.a.run.app/mint', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Origin': 'https://cdao-mint-tm7praakga-uc.a.run.app',
             'Access-Control-Allow-Credentials': 'true',
             'Access-Control-Allow-Headers': 'X-Requested-With',
             'Access-Control-Allow-Methods': 'GET, POST'
         },
         body: JSON.stringify({ 
           "name": "AG21",
-          "witness": userWitness, // .toString(), //  "witness": toHex(userWitness.to_bytes()),
+          "witness": userWitness,
           "tx": tx.toString(),
         })
       }).then(response => console.log(JSON.stringify(response)))

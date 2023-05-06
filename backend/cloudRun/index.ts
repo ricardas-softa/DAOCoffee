@@ -10,14 +10,15 @@ const router = new Router();
 console.log("starting app");
 // Route for minting an NFT with name and imagePath
 router.post('/mint', async (context) => {
-    const { name, wittnes, tx } = await context.request.body().value;
-    context.response.body = await mintNFT(name, wittnes, tx);
+    const { name, witness, tx } = await context.request.body().value;
+    console.log("starting wittnes ", witness);
+    context.response.body = await mintNFT(name, witness, tx);
 });
 
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-await app.listen({ port: PORT });
+await app.listen({ port: 8000 });
 
 // Run the server with:
 // deno run --allow-net --allow-env --allow-read index.ts

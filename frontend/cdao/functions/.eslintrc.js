@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 module.exports = {
   root: true,
   env: {
@@ -14,7 +15,7 @@ module.exports = {
   ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
-    project: ["tsconfig.json", "tsconfig.dev.json"],
+    project: ["/home/rese/rese/DAPP/coffee-nft/frontend/cdao/functions/tsconfig.json", "/home/rese/rese/DAPP/coffee-nft/frontend/cdao/functions/tsconfig.dev.json"],
     sourceType: "module",
   },
   ignorePatterns: [

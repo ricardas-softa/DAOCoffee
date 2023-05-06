@@ -3,13 +3,13 @@
     "module": "commonjs",
     "noImplicitReturns": true,
     "noUnusedLocals": true,
-    "outDir": "lib",
+    "outDir": "/home/rese/rese/DAPP/coffee-nft/frontend/cdao/functions/lib",
     "sourceMap": true,
     "strict": true,
     "target": "es2017"
   },
   "compileOnSave": true,
   "include": [
-    "src"
+    "/home/rese/rese/DAPP/coffee-nft/frontend/cdao/functions/src"
   ]
 }
