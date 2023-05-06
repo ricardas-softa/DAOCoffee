@@ -46,23 +46,18 @@ async function readValidator() {
 
 async function purchaseFrontStart() {
   try{
-    console.log("purchaseFrontStart");
     let cWallet = await connectWallet();
     if(cWallet=="Wallet not found"){
       return cWallet;
     }else{
       const cd =  await import( './lucid-cardano/esm/src/mod.js');
-      console.log("Wallet ", cWallet);
       const lucid = cWallet.l;
-      console.log("await readValidator()");
       const mintingPolicy = await readValidator();
-      console.log("mintingPolicyToId()", mintingPolicy);
       const policyId = lucid.utils.mintingPolicyToId(
         mintingPolicy,
       );
 
       // initiate purchase calling end point
-      console.log("initiate purchase calling end point");
       const imageCID = "QmT1eyranmxTa3EWAePFmpdFWGGDAynqiZZQxnvNLbEt5J";
       const name = "NWO30";
       const asset = policyId + cd.fromText(name);
@@ -75,9 +70,7 @@ async function purchaseFrontStart() {
           },
         },
       };
-    
-      // const userSigningAddress = await lucid.wallet.address();
-    
+        
       const MintAction = () => cd.Data.to(new cd.Constr(0, []));
     
       const tx = await lucid
@@ -91,7 +84,6 @@ async function purchaseFrontStart() {
         .complete();
     
       const userWitness = await tx.partialSign();
-      console.log("userWitness", userWitness)
       fetch('https://cdao-mint-tm7praakga-uc.a.run.app/mint', {
         method: 'POST',
         headers: {
@@ -107,87 +99,13 @@ async function purchaseFrontStart() {
           "witness": userWitness,
           "tx": tx.toString(),
         })
-      }).then(response => console.log(JSON.stringify(response)))
+      }).then(response => {
+        console.log("response", response, JSON.stringify(response));
+        return {"response": response, "url": `ipfs://${imageCID}`};
+      })
     }
    } catch (e) {
     console.log("Purchase Front Start ", e);
-    return "Unable to connect to wallet";
+    return {"error": `Unable to completee your purchase. Please try again. ${e}`};
   }
 }
-
-// TODO: add quantity/ comms dart to js
-// async function purchaseBackStart() {
-//   try{
-//     console.log("purchaseBackStart");
-//     let cWallet = await connectWallet();
-//     if(cWallet=="Wallet not found"){
-//     return cWallet;
-//     }else{
-//     console.log("Wallet ", cWallet);
-    
-//     // initiate purchase calling end point
-//     // var partialTx = await post/endpoint
-
-//     // result partial sign and return to complete end point
-//     const userWitness = await partialTx.transaction.partialSign();
-//     return {
-//       "witness": witness,
-//       "userWitness": userWitness,
-//       "partialTx": partialTx
-//     };
-
-
-//     const signedTx = partialTx.transaction.assemble([userWitness, partialTx.witness]).complete();
-//     const txHash = signedTx.submit();
-//     console.log("tx: ", tx);
-
-//     console.log("txHash: ", txHash);
-//     return txHash.toString();
-//     }
-//    } catch (e) {
-//     console.log("Purchase Back Start "+e);
-//     return "Unable to connect to wallet";}
-// } 
-// async function alwaysSucceed () {
-//  console.log("alwaysSucceed");
-//  let cWallet = await connectWallet();
-//  const lucid = cWallet.l;
-//  const api = cWallet.a;
-
-//  const cd =  await import( './lucid-cardano/esm/src/mod.js');import cbor from 'cbor-web'
- 
-//  const alwaysSucceedScript = {
-//    type: "PlutusV2",
-//    script: "49480100002221200101",
-//  };
-//  const alwaysSucceedAddress = lucid.utils.validatorToAddress(
-//    alwaysSucceedScript
-//  );
-
-//  // const tx = await lucid.newTx()
-//  //   .collectFrom([scriptUtxo])
-//  //   .payToAddress("addr..", {lovelace: 50000000n})
-//  //   .attachSpendingValidator(multisigScript)
-//  //   .complete();
-//  // const signedTx = await tx.assemble(["<sig_1>", "<sig_2>"]).complete();
-//  // const txHash = await signedTx.submit();
- 
-//  const Datum = () => cd.Data.void();
-
-//  const tx = await lucid
-//  .newTx()
-//  .payToContract(alwaysSucceedAddress, { inline: Datum() }, {lovelace: 40000000n})
-//  .payToContract(alwaysSucceedAddress, {
-//    asHash: Datum(),
-//    scriptRef: alwaysSucceedScript, // adding plutusV2 script to output
-//  }, {})
-//  .complete();
-//  console.log("tx: ", tx);
-
-//  const signedTx = await tx.sign().complete();
-//  console.log("signedTx: ", signedTx);
-
-//  const txHash = await signedTx.submit();
-//  console.log("txHash: ", txHash);
-//  return txHash;
-// }

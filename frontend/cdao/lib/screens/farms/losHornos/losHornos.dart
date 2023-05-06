@@ -3,7 +3,6 @@ import 'dart:js_util';
 import 'package:flutter/material.dart';
 import 'package:js/js.dart';
 
-// import '../../../providers/lucid_service.dart';
 import '../../../widgets/common/orderFormDialog.dart';
 import '../../../widgets/common/title.dart';
 import '../../../widgets/farm/FarmCarasole.dart';
@@ -107,15 +106,15 @@ class _LosHornosScreenState extends State<LosHornosScreen> {
                         height: boxH,
                       ),
                       // TODO: update short description of the purchasing process
-                      const Text(
-                        ''' Description of the purchasing process: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.''',
-                        textAlign: TextAlign.center,
-                      ),
+                      // const Text(
+                      //   ''' Description of the purchasing process: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.''',
+                      //   textAlign: TextAlign.center,
+                      // ),
                       SizedBox(
                         height: boxH,
                       ),
                       const Text(
-                        ''' PreProd Test Net Always Succeed Locking Contract''',
+                        ''' A NFT & One Pound of Premium Coffee for 45 ADA''',
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(
@@ -125,8 +124,6 @@ class _LosHornosScreenState extends State<LosHornosScreen> {
                       // TODO: check if any coffee is left befor showing button
                       ElevatedButton(
                           onPressed: () async {
-
-                            
                             await showDialog(
                                 context: context,
                                 builder: (_) {
@@ -141,9 +138,6 @@ class _LosHornosScreenState extends State<LosHornosScreen> {
                                         child: const OrderFormDialog()),
                                   );
                                 });
-                            // TODO: shipping info form Name, Address, Quantity, Phone# ?
-                            // show dialog form trigger purchase froom form
-                            // String result = await purchases();
                             // TODO: if tx suceeds increase bags sold and enter the customers info from form into db
                           },
                           child: const Text('Purchase')),
@@ -156,16 +150,6 @@ class _LosHornosScreenState extends State<LosHornosScreen> {
         ));
   }
 }
-
-//   Future<String> purchases() async {
-//     // var obj=  await  promiseToFuture(js.context.callMethod('alwaysSucceed'));
-//     // js.JsObject obj=  await promiseToFuture(js.context.callMethod('alwaysSucceed'));
-//     var promise = purchaseBackStart();
-//     var obj = await promiseToFuture(promise);
-//     print(obj.toString());
-//     return obj.toString();
-//   }
-// }
 // TODO: User order status
 // TODO: User NFT Viewer
 // TODO: User Managment

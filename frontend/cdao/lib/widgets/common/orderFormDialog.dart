@@ -22,20 +22,9 @@ class OrderFormDialog extends StatefulWidget {
 external purchaseFrontStart();
 
 class _OrderFormDialogState extends State<OrderFormDialog> {
-  // String _name = "Test";
-  // String _email = "test@test.com";
-  // String _street1 = "Test";
-  // String? _street2;
-  // String _city = "Test";
-  // String _state = "NM";
-  // int _zip = 87104;
-  // late int _quantity;
   String _err = '';
   bool _isSubmitting = false;
   final _formKey = GlobalKey<FormState>();
-
-  // @JS()
-  // external purchaseBackStart();
 
   @override
   Widget build(BuildContext context) {
@@ -48,24 +37,21 @@ class _OrderFormDialogState extends State<OrderFormDialog> {
     int zip = 87104;
     // TODO: add quantity
     Future<String> purchases() async {
-      // var obj=  await  promiseToFuture(js.context.callMethod('alwaysSucceed'));
-      // js.JsObject obj=  await promiseToFuture(js.context.callMethod('alwaysSucceed'));
       var promise = purchaseFrontStart();
       var obj = await promiseToFuture(promise);
-      print(obj.toString());
+      print('obj.toString() ${obj.toString()}');
+      print('obj $obj');
       return obj.toString();
     }
 
     Future<void> _submitOrderForm() async {
-      // print('email $state');
       _isSubmitting = true;
       var firestore = Provider.of<FirestoreService>(context, listen: false);
       final isValid = _formKey.currentState!.validate();
       if (isValid) {
         _formKey.currentState!.save();
-        // start purchase
         String result = await purchases();
-        if (result != 'fail') {
+        if (result != 'error' ) {
           bool dbErr = await firestore.sendOrderForm(
             name: name,
             email: email,
@@ -78,12 +64,14 @@ class _OrderFormDialogState extends State<OrderFormDialog> {
           );
           if (dbErr) {
             setState(() {
+              _isSubmitting = false;
               _err =
-                  'Sorry your purchases did not get recorded. Please contact us asap.';
+                  'Sorry your purchases did not go through please try again.';
             });
           }
         } else {
           setState(() {
+            _isSubmitting = false;
             _err = 'Sorry your purchases did not go through please try again.';
           });
         }
@@ -147,163 +135,162 @@ class _OrderFormDialogState extends State<OrderFormDialog> {
                 //     _quantity = int.parse(value!);
                 //   },
                 // ),
-                // name
-                // TextFormField(
-                //   key: const ValueKey('name'),
-                //   autocorrect: false,
-                //   textCapitalization: TextCapitalization.none,
-                //   enableSuggestions: false,
-                //   keyboardType: TextInputType.text,
-                //   validator: (value) {
-                //     if (value!.isEmpty) {
-                //       String e = 'Please enter your name.';
-                //       setState(() {
-                //         _err = e;
-                //         _isSubmitting = false;
-                //       });
-                //       return e;
-                //     }
-                //     return null;
-                //   },
-                //   decoration: const InputDecoration(
-                //     labelText: 'Your Name',
-                //   ),
-                //   onSaved: (value) {
-                //     _name = value!;
-                //   },
-                // ),
-                // //email
-                // TextFormField(
-                //   key: const ValueKey('email'),
-                //   autocorrect: false,
-                //   textCapitalization: TextCapitalization.none,
-                //   enableSuggestions: false,
-                //   keyboardType: TextInputType.emailAddress,
-                //   validator: (value) {
-                //     if (value!.isEmpty || !EmailValidator.validate(value)) {
-                //       String e = 'Please enter a valid email address.';
-                //       setState(() {
-                //         _err = e;
-                //         _isSubmitting = false;
-                //       });
-                //       return e;
-                //     }
-                //     return null;
-                //   },
-                //   decoration: const InputDecoration(
-                //     labelText: 'Email',
-                //   ),
-                //   onSaved: (value) {
-                //     _email = value!;
-                //   },
-                // ),
-                // //street1
-                // TextFormField(
-                //   key: const ValueKey('street1'),
-                //   autocorrect: false,
-                //   textCapitalization: TextCapitalization.none,
-                //   enableSuggestions: false,
-                //   keyboardType: TextInputType.streetAddress,
-                //   // validator: (value) {
-                //   //   if (value!.isEmpty || !EmailValidator.validate(value)) {
-                //   //     return 'Please enter a valid email address.';
-                //   //   }
-                //   //   return null;
-                //   // },
-                //   decoration: const InputDecoration(
-                //     labelText: 'Street Address',
-                //   ),
-                //   onSaved: (value) {
-                //     _street1 = value!;
-                //   },
-                // ),
-                // //street2
-                // TextFormField(
-                //   key: const ValueKey('street2'),
-                //   autocorrect: false,
-                //   textCapitalization: TextCapitalization.none,
-                //   enableSuggestions: false,
-                //   keyboardType: TextInputType.streetAddress,
-                //   // validator: (value) {
-                //   //   if (value!.isEmpty || !EmailValidator.validate(value)) {
-                //   //     return 'Please enter a valid email address.';
-                //   //   }
-                //   //   return null;
-                //   // },
-                //   decoration: const InputDecoration(
-                //     labelText: 'Street Address',
-                //   ),
-                //   onSaved: (value) {
-                //     _street2 = value!;
-                //   },
-                // ),
-                // //city
-                // TextFormField(
-                //   key: const ValueKey('city'),
-                //   autocorrect: false,
-                //   textCapitalization: TextCapitalization.none,
-                //   enableSuggestions: false,
-                //   keyboardType: TextInputType.text,
-                //   // validator: (value) {
-                //   //   if (value!.isEmpty || !EmailValidator.validate(value)) {
-                //   //     return 'Please enter a valid email address.';
-                //   //   }
-                //   //   return null;
-                //   // },
-                //   decoration: const InputDecoration(
-                //     labelText: 'City/Town',
-                //   ),
-                //   onSaved: (value) {
-                //     _city = value!;
-                //   },
-                // ),
-                // //state
-                // TextFormField(
-                //   key: const ValueKey('state'),
-                //   autocorrect: false,
-                //   textCapitalization: TextCapitalization.none,
-                //   enableSuggestions: false,
-                //   keyboardType: TextInputType.text,
-                //   // validator: (value) {
-                //   //   if (value!.isEmpty || !EmailValidator.validate(value)) {
-                //   //     return 'Please enter a valid email address.';
-                //   //   }
-                //   //   return null;
-                //   // },
-                //   decoration: const InputDecoration(
-                //     labelText: 'State ',
-                //   ),
-                //   onSaved: (value) {
-                //     _state = value!;
-                //   },
-                // ),
-                // //Zip
-                // TextFormField(
-                //   key: const ValueKey('zip'),
-                //   autocorrect: false,
-                //   textCapitalization: TextCapitalization.none,
-                //   enableSuggestions: false,
-                //   keyboardType: TextInputType.number,
-                //   validator: (value) {
-                //     if (value!.isEmpty ||
-                //         value.length != 5 ||
-                //         !isNumeric(value)) {
-                //       String e = 'Please enter a valid zip code.';
-                //       setState(() {
-                //         _err = e;
-                //         _isSubmitting = false;
-                //       });
-                //       return e;
-                //     }
-                //     return null;
-                //   },
-                //   decoration: const InputDecoration(
-                //     labelText: 'Zip Code',
-                //   ),
-                //   onSaved: (value) {
-                //     _zip = int.parse(value!);
-                //   },
-                // ),
+                TextFormField(
+                  key: const ValueKey('name'),
+                  autocorrect: false,
+                  textCapitalization: TextCapitalization.none,
+                  enableSuggestions: false,
+                  keyboardType: TextInputType.text,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      String e = 'Please enter your name.';
+                      setState(() {
+                        _err = e;
+                        _isSubmitting = false;
+                      });
+                      return e;
+                    }
+                    return null;
+                  },
+                  decoration: const InputDecoration(
+                    labelText: 'Your Name',
+                  ),
+                  onSaved: (value) {
+                    name = value!;
+                  },
+                ),
+                //email
+                TextFormField(
+                  key: const ValueKey('email'),
+                  autocorrect: false,
+                  textCapitalization: TextCapitalization.none,
+                  enableSuggestions: false,
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value!.isEmpty || !EmailValidator.validate(value)) {
+                      String e = 'Please enter a valid email address.';
+                      setState(() {
+                        _err = e;
+                        _isSubmitting = false;
+                      });
+                      return e;
+                    }
+                    return null;
+                  },
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                  ),
+                  onSaved: (value) {
+                    email = value!;
+                  },
+                ),
+                //street1
+                TextFormField(
+                  key: const ValueKey('street1'),
+                  autocorrect: false,
+                  textCapitalization: TextCapitalization.none,
+                  enableSuggestions: false,
+                  keyboardType: TextInputType.streetAddress,
+                  // validator: (value) {
+                  //   if (value!.isEmpty || !EmailValidator.validate(value)) {
+                  //     return 'Please enter a valid email address.';
+                  //   }
+                  //   return null;
+                  // },
+                  decoration: const InputDecoration(
+                    labelText: 'Street Address',
+                  ),
+                  onSaved: (value) {
+                    street1 = value!;
+                  },
+                ),
+                //street2
+                TextFormField(
+                  key: const ValueKey('street2'),
+                  autocorrect: false,
+                  textCapitalization: TextCapitalization.none,
+                  enableSuggestions: false,
+                  keyboardType: TextInputType.streetAddress,
+                  // validator: (value) {
+                  //   if (value!.isEmpty || !EmailValidator.validate(value)) {
+                  //     return 'Please enter a valid email address.';
+                  //   }
+                  //   return null;
+                  // },
+                  decoration: const InputDecoration(
+                    labelText: 'Street Address',
+                  ),
+                  onSaved: (value) {
+                    street2 = value!;
+                  },
+                ),
+                //city
+                TextFormField(
+                  key: const ValueKey('city'),
+                  autocorrect: false,
+                  textCapitalization: TextCapitalization.none,
+                  enableSuggestions: false,
+                  keyboardType: TextInputType.text,
+                  // validator: (value) {
+                  //   if (value!.isEmpty || !EmailValidator.validate(value)) {
+                  //     return 'Please enter a valid email address.';
+                  //   }
+                  //   return null;
+                  // },
+                  decoration: const InputDecoration(
+                    labelText: 'City/Town',
+                  ),
+                  onSaved: (value) {
+                    city = value!;
+                  },
+                ),
+                //state
+                TextFormField(
+                  key: const ValueKey('state'),
+                  autocorrect: false,
+                  textCapitalization: TextCapitalization.none,
+                  enableSuggestions: false,
+                  keyboardType: TextInputType.text,
+                  // validator: (value) {
+                  //   if (value!.isEmpty || !EmailValidator.validate(value)) {
+                  //     return 'Please enter a valid email address.';
+                  //   }
+                  //   return null;
+                  // },
+                  decoration: const InputDecoration(
+                    labelText: 'State ',
+                  ),
+                  onSaved: (value) {
+                    state = value!;
+                  },
+                ),
+                //Zip
+                TextFormField(
+                  key: const ValueKey('zip'),
+                  autocorrect: false,
+                  textCapitalization: TextCapitalization.none,
+                  enableSuggestions: false,
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value!.isEmpty ||
+                        value.length != 5 ||
+                        !isNumeric(value)) {
+                      String e = 'Please enter a valid zip code.';
+                      setState(() {
+                        _err = e;
+                        _isSubmitting = false;
+                      });
+                      return e;
+                    }
+                    return null;
+                  },
+                  decoration: const InputDecoration(
+                    labelText: 'Zip Code',
+                  ),
+                  onSaved: (value) {
+                    zip = int.parse(value!);
+                  },
+                ),
                 const SizedBox(height: 12),
                 _isSubmitting
                     ? const CircularProgressIndicator()

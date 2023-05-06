@@ -29,21 +29,6 @@ const lucid = await Lucid.new(
 const mnemonic = MNEMONIC
 lucid.selectWalletFromSeed(mnemonic);
 
-// const mintingPolicy = await readValidator();
-
-// async function readValidator(): Promise<MintingPolicy> {
-//   const validator = JSON.parse(await Deno.readTextFile("../plutus.json"))
-//       .validators[0];
-//   return {
-//       type: "PlutusV2",
-//       script: toHex(cbor.encode(fromHex(validator.compiledCode)))
-//   }
-// }
-
-// const policyId: PolicyId = lucid.utils.mintingPolicyToId(
-//   mintingPolicy,
-// );
-
 export async function mintNFT(
   name: string,
   witness: TransactionWitnesses,
@@ -59,15 +44,14 @@ export async function mintNFT(
     console.log('witness: ', witness);
     const txObj = lucid.fromTx(tx);
   
-    // const daoCoffeeSigningAddress = await lucid.wallet.address();
   
     const daoWitness = await txObj.partialSign();
     const signedTx = txObj.assemble([daoWitness, witness]).complete();
     const txHash = (await signedTx).submit();
-    return { "txHash": txHash };
+    return {"txHash": txHash};
   } catch (error) {
     console.error('Error mintNFT:', error);
-    throw error;
+    return {"error": error };
   }
 }
 
