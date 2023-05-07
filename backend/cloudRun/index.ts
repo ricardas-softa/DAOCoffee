@@ -12,7 +12,9 @@ console.log("starting app");
 router.post('/mint', async (context) => {
     const { name, witness, tx } = await context.request.body().value;
     console.log("starting wittnes ", witness);
-    context.response.body = await mintNFT(name, witness, tx);
+    const result = await mintNFT(name, witness, tx);
+    console.log(`index mintNFT reuslt ${result}`);
+    context.response.body = result;
 });
 
 app.use(router.routes());
