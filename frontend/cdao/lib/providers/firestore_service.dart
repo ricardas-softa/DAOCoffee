@@ -29,23 +29,25 @@ class FirestoreService {
     required String city,
     required String state,
     required int zip,
+    required String hash,
+    required String timestamp,
     // required int quantity
   }) async {
     CollectionReference ordersReff = firestore.collection('orders');
     int randomNumber =  Random().nextInt(100000);
     bool err = false;
-    await ordersReff.doc(randomNumber.toString()).set(
-      {
-        name: name,
-        email: email,
-        street1: street1,
-        street2: street2,
-        city: city,
-        state: state,
-        zip: zip,
-        // quantity: quantity
-      },
-    ).catchError((err) {
+    await ordersReff.doc(randomNumber.toString()).set({
+      name: name,
+      email: email,
+      street1: street1,
+      street2: street2,
+      city: city,
+      state: state,
+      zip: zip,
+      hash: hash,
+      timestamp: DateTime.now().millisecondsSinceEpoch.toString(),
+      // quantity: quantity
+    }).catchError((err) {
       err = true;
     });
     return err;

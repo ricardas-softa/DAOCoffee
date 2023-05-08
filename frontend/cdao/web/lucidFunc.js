@@ -1,22 +1,14 @@
 
 async function connectWallet () {
   try{
-    console.log("connectWallet");
+    // console.log("connectWallet");
     const cd =  await import( './lucid-cardano/esm/src/mod.js');
-    console.log("0");
       const lucid = await cd.Lucid.new(
         new cd.Blockfrost("https://cardano-preprod.blockfrost.io/api/v0", "preprodkiIrs2oYlyPSY0nbGKccYS2aSzLpnEbj"),
         "Preprod"
         );
-  
-      console.log("1");
       const api = await window.cardano.nami.enable();
-       console.log("2");
-    // Assumes you are in a browser environment
-    //     console.log(api.toString()+"Apiiii");
        lucid.selectWallet(api);
-            console.log("3");
-    //   return {"l": lucid, "a": api};
        return {"l": lucid};
     }
   catch(e){
@@ -30,10 +22,8 @@ async function readValidator() {
   try{
     const response = await fetch("./plutus.json");
       const jResp = await response.json();
-      console.log("jResp", jResp);
       const validator = jResp
       .validators[0];
-      console.log("validator.compiledCode", validator.compiledCode);
       return {
           type: "PlutusV2",
           script: validator.compiledCode
@@ -62,7 +52,7 @@ async function purchaseFrontStart() {
 
         // initiate purchase calling end point
         const imageCID = "QmT1eyranmxTa3EWAePFmpdFWGGDAynqiZZQxnvNLbEt5J";
-        const name = "0001";
+        const name = "0007"; //TODO: get the db id from request.
         const asset = policyId + cd.fromText(name);
       
         const metadata = {
@@ -87,27 +77,33 @@ async function purchaseFrontStart() {
           .complete();
       
         const userWitness = await tx.partialSign();
-        fetch('https://localhost:8000/mint', { //'https://cdao-mint-tm7praakga-uc.a.run.app/mint'
-          method: 'POST',
-          headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-              'Access-Control-Allow-Origin': 'https://cdao-mint-tm7praakga-uc.a.run.app',
-              'Access-Control-Allow-Credentials': 'true',
-              'Access-Control-Allow-Headers': 'X-Requested-With',
-              'Access-Control-Allow-Methods': 'GET, POST'
-          },
-          body: JSON.stringify({ 
-            "name": "AG21",
-            "witness": userWitness,
-            "tx": tx.toString(),
-          })
-        }).then(response => {
-          console.log("response", response);
-          console.log("response", response.body);
-          return JSON.stringify(response.body);
-        })
-    }
+        console.log("tx", tx.toString());
+        console.log("witness", userWitness);
+        return `{"tx": "${tx.toString()}", "witness": "${userWitness}"}`;
+        //'https://cdao-mint-tm7praakga-uc.a.run.app/mint' http://34.121.45.85:8000/mint
+        // fetch('https://cdao-mint-tm7praakga-uc.a.run.app/mint', {
+        //   method: 'POST',
+        //   headers: {
+        //       'Accept': 'application/json',
+        //       'Content-Type': 'application/json',
+        //       'Access-Control-Allow-Origin': '*',
+        //       'Access-Control-Allow-Credentials': 'true',
+        //       'Access-Control-Allow-Headers': 'X-Requested-With',
+        //       'Access-Control-Allow-Methods': 'GET, POST'
+        //   },
+        //   body: JSON.stringify({ 
+        //     "name": name,
+        //     "witness": userWitness,
+        //     "tx": tx.toString(),
+        //   })
+        // }).then(response => {
+        //   console.log("response", response);
+        //   console.log("JSON.stringify(response)", JSON.stringify(response));
+        //   console.log("response body", response.body);
+        //   console.log("JSON.stringify(response.body)", JSON.stringify(response.body));
+        //   return response.body;
+        // })
+      }
     }
    } catch (e) {
     console.log("Purchase Front Start error", e);

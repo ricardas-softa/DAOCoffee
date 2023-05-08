@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:js/js.dart';
@@ -9,6 +12,8 @@ import 'package:provider/provider.dart';
 // import 'package:location/location.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../models/mintResponse.dart';
+import '../../models/orderCunstructorResponse.dart';
 import '../../providers/firestore_service.dart';
 
 class OrderFormDialog extends StatefulWidget {
@@ -39,10 +44,53 @@ class _OrderFormDialogState extends State<OrderFormDialog> {
 
     Future<String> purchases() async {
       var promise = purchaseFrontStart();
-      var obj = await promiseToFuture(promise);
-      print('obj ${obj.runtimeType}, $obj');
-      // print('obj.toString() ${obj}');
-      return obj.toString();
+      String hash = '';
+      promiseToFuture(promise).asStream().listen((value) async {
+        if (value != null && value != Null) {
+          OrderConstructor order = OrderConstructor.fromMap(json.decode(value));
+          print(
+              'OrderConstructor order.tx: ${order.tx.runtimeType} ${order.tx}');
+          print(
+              'OrderConstructor order.witness: ${order.witness.runtimeType} ${order.witness}');
+          // String data = '''{
+          //   "name": "$name",
+          //   "witness": "${order.witness}",
+          //   "tx": "${order.tx}"
+          // }''';
+          http.Response response = await http.post(
+            Uri.parse('https://cdao-mint-tm7praakga-uc.a.run.app/mint'),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: jsonEncode(<String, String>{
+              'name': name,
+              'witness': order.witness as String,
+              'tx': order.tx as String 
+            })
+          );
+          print(
+              'http.Response response.body ${response.body.runtimeType} ${response.body}');
+          if (response.statusCode == 200) {
+            MintResponse result =
+                MintResponse.fromMap(json.decode(response.body.toString()));
+            print('MintResponse result ${result.runtimeType} $result');
+            if (result.txhash != null) {
+              print('MintResponse result.txhash ${result.txhash.runtimeType} ${result.txhash}');
+              hash = result.txhash as String;
+            } else {
+              print('MintResponse result.txhash ${result.error.runtimeType} ${result.error}');
+              hash = 'error';
+              _err = '${result.error}';
+            }
+            return;
+          } else {
+            hash = 'error';
+            _err = 'Sorry your purchases did not go through please try again.';
+            return;
+          }
+        }
+      });
+      return hash;
     }
 
     Future<void> _submitOrderForm() async {
@@ -51,8 +99,9 @@ class _OrderFormDialogState extends State<OrderFormDialog> {
       final isValid = _formKey.currentState!.validate();
       if (isValid) {
         _formKey.currentState!.save();
-        String result = await purchases();
-        if (!result.contains('error')) {
+        // String result = await purchases();
+        String hash = await purchases();
+        if (!hash.contains('error')) {
           bool dbErr = await firestore.sendOrderForm(
             name: name,
             email: email,
@@ -61,6 +110,8 @@ class _OrderFormDialogState extends State<OrderFormDialog> {
             city: city,
             state: state,
             zip: zip,
+            hash: hash,
+            timestamp: DateTime.now().millisecondsSinceEpoch.toString(),
             // quantity: _quantity
           );
           if (dbErr) {
@@ -139,9 +190,9 @@ class _OrderFormDialogState extends State<OrderFormDialog> {
                 //   },
                 // ),
                 const Text(
-                    'We need a little information for shipping.',
-                    style: TextStyle(color: Colors.white),
-                  ),
+                  'We need a little information for shipping.',
+                  style: TextStyle(color: Colors.white),
+                ),
                 // TextFormField(
                 //   key: const ValueKey('name'),
                 //   autocorrect: false,

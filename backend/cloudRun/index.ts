@@ -11,9 +11,10 @@ console.log("starting app");
 // Route for minting an NFT with name and imagePath
 router.post('/mint', async (context) => {
     const { name, witness, tx } = await context.request.body().value;
-    console.log("starting wittnes ", witness);
+    console.log(`tx: ${tx}`);
+    console.log(`witness: ${witness}`);
     const result = await mintNFT(name, witness, tx);
-    console.log(`index mintNFT reuslt ${result}`);
+    console.log(`index mintNFT reuslt ${JSON.stringify(result.txHash)}`);
     context.response.body = result;
 });
 
