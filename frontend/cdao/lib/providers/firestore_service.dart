@@ -30,39 +30,28 @@ class FirestoreService {
     required String state,
     required int zip,
     required String hash,
-    required String timestamp,
+    required String nft,
     // required int quantity
   }) async {
     CollectionReference ordersReff = firestore.collection('orders');
     int randomNumber =  Random().nextInt(100000);
     bool err = false;
     await ordersReff.doc(randomNumber.toString()).set({
-      name: name,
-      email: email,
-      street1: street1,
-      street2: street2,
-      city: city,
-      state: state,
-      zip: zip,
-      hash: hash,
-      timestamp: DateTime.now().millisecondsSinceEpoch.toString(),
+      'id': randomNumber.toString(),
+      'name': name,
+      'street1': street1,
+      'street2': street2,
+      'city': city,
+      'state': state,
+      'zip': zip,
+      'email': email,
+      'hash': hash,
+      'nft': nft,
+      'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
       // quantity: quantity
     }).catchError((err) {
       err = true;
     });
     return err;
-  }
-
-  Future<String> earlySignUpEmail(
-      {required String email,}) async {
-    CollectionReference earlyReff = firestore.collection('earlySignUpEmail');
-    await earlyReff.add(
-      {
-        'email': email,
-      },
-    ).then((value) {
-      return value;
-    });
-    return 'Contact Sent';
   }
 }

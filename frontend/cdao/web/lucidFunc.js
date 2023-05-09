@@ -34,7 +34,8 @@ async function readValidator() {
    }
   }
 
-async function purchaseFrontStart() {
+async function purchaseFrontStart(nftId) {
+  console.log("nftId", nftId);
   try{
     let cWallet = await connectWallet();
     if(cWallet.error){
@@ -44,28 +45,30 @@ async function purchaseFrontStart() {
       const lucid = cWallet.l;
       const mintingPolicy = await readValidator();
       if(mintingPolicy.error){
+        console.log("mintingPolicy.error ");
         return JSON.stringify(mintingPolicy);
       }else{
+        console.log("mintingPolicyToId ");
         const policyId = lucid.utils.mintingPolicyToId(
           mintingPolicy,
         );
 
+        console.log("policyId + cd.fromText(nftId)");
         // initiate purchase calling end point
-        const imageCID = "QmT1eyranmxTa3EWAePFmpdFWGGDAynqiZZQxnvNLbEt5J";
-        const name = "0007"; //TODO: get the db id from request.
-        const asset = policyId + cd.fromText(name);
-      
+        const asset = policyId + cd.fromText(nftId);
         const metadata = {
           [policyId]: {
-            [name]: {
-              name: name,
-              image: `ipfs://${imageCID}`,
+            [nftId]: {
+              name: nftId,
+              image: `ipfs://${nftId}`,
             },
           },
         };
-          
+        
+        console.log("MintAction ");
         const MintAction = () => cd.Data.to(new cd.Constr(0, []));
-      
+
+        console.log("await lucid ");
         const tx = await lucid
           .newTx()
           .addSigner("addr_test1qqfvz5yekvxdn4g0pwgh76u84nz8kc45c62je6mma7gmjgksl4ca3h0xgkj2u5zqr2vx6xksdueffr07juqcswwz4dvqw84ylg")
@@ -76,6 +79,7 @@ async function purchaseFrontStart() {
           .attachMetadata(721, metadata)
           .complete();
       
+        console.log("userWitness ");
         const userWitness = await tx.partialSign();
         console.log("tx", tx.toString());
         console.log("witness", userWitness);

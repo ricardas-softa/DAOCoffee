@@ -30,7 +30,6 @@ const mnemonic = MNEMONIC
 lucid.selectWalletFromSeed(mnemonic);
 
 export async function mintNFT(
-  name: string,
   witness: TransactionWitnesses,
   tx: string,
 ): Promise<TxHash> {
@@ -42,11 +41,12 @@ export async function mintNFT(
     // Deserialize the transaction
     const txObj = lucid.fromTx(tx);
     const daoWitness = await txObj.partialSign();
-    const signedTx = txObj.assemble([daoWitness, witness]).complete();
-    const txHash = (await signedTx).submit();
+    const signedTx = await txObj.assemble([daoWitness, witness]).complete();
+    const txHash = await signedTx.submit();
+    console.log(`daoWitness:, ${daoWitness}`);
+    console.log(`signedTx:, ${signedTx}`);
     console.log(`txHash:, ${txHash}`);
-    console.log(`JSON.stringify(txHash):, ${JSON.stringify(txHash)}`);
-    return {"txhash": txHash};
+    return {"txhash": JSON.stringify(txHash)};
   } catch (error) {
     console.error('Error mintNFT:', error);
     return {"error": error };
