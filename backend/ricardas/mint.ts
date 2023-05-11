@@ -13,6 +13,7 @@ import {
           Constr,
           TransactionWitnesses,
         } from "./deps.ts";
+// import { testFirebase } from "./firebase.ts";
 import { PINATA_API_KEY, PINATA_SECRET_KEY, BLOCKFROST_PROJ, MNEMONIC, DAO_ADDRESS } from "./env.ts";
 
 const lucid = await Lucid.new(
