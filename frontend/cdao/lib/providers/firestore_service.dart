@@ -20,7 +20,7 @@ class FirestoreService {
     });
     return 'Contact Sent';
   }
-  
+
   Future<bool> sendOrderForm({
     required String name,
     required String email,
@@ -34,7 +34,7 @@ class FirestoreService {
     // required int quantity
   }) async {
     CollectionReference ordersReff = firestore.collection('orders');
-    int randomNumber =  Random().nextInt(100000);
+    int randomNumber = Random().nextInt(100000);
     bool err = false;
     await ordersReff.doc(randomNumber.toString()).set({
       'id': randomNumber.toString(),
@@ -50,6 +50,7 @@ class FirestoreService {
       'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
       // quantity: quantity
     }).catchError((err) {
+      print('send order form error $err');
       err = true;
     });
     return err;

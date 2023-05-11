@@ -11,7 +11,6 @@ class StorageService {
     List<String> urlList = [];
     final storageRef = _storage.ref().child("farms/$farmName/carousel");
     final listResult = await storageRef.listAll();
-    print('4444444444 listResult ${listResult.toString()}');
 
     for (var prefix in listResult.prefixes) {
       print('4444444444 prefix $prefix');
@@ -20,7 +19,6 @@ class StorageService {
     }
 
     for (Reference item in listResult.items) {
-      print('4444444444 item ${item.fullPath}');
       urlList.add(await _storage.ref().child(item.fullPath).getDownloadURL());
     }
     return urlList;
@@ -32,42 +30,8 @@ class StorageService {
     return url;
   }
 
-  //1 signIn
-  Future<String> downloadFromStorageToFile(
-      {required String path, required String fileName}) async {
-    final pathReference = _storage.refFromURL(path);
-    final io.Directory systemTempDir = io.Directory.systemTemp;
-    final io.File tempFile = io.File('${systemTempDir.path}/$fileName');
-    final bool fileExsist = await tempFile.exists();
-    try {
-      if (fileExsist) {
-        tempFile.delete();
-      }
-
-      final downloadTask = pathReference.writeToFile(tempFile);
-      downloadTask.snapshotEvents.listen((taskSnapshot) {
-        switch (taskSnapshot.state) {
-          case TaskState.running:
-            // TODO: Handle this case.
-            break;
-          case TaskState.paused:
-            // TODO: Handle this case.
-            break;
-          case TaskState.success:
-            // debugPrint('*****************Storage download success: $taskSnapshot');
-            break;
-          case TaskState.canceled:
-            // TODO: Handle this case.
-            break;
-          case TaskState.error:
-            debugPrint(
-                '*****************Storage download error: $taskSnapshot');
-            break;
-        }
-      });
-    } catch (e) {
-      debugPrint('***********************Storage Download e $e');
-    }
-    return 'sucsess';
+  Future<String> getNFTDownloadURLs({required String gs}) async {
+    String url = await _storage.ref().child(gs.substring(28)).getDownloadURL();
+    return url;
   }
 }

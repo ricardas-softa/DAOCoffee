@@ -44,7 +44,7 @@ class _OrderFormDialogState extends State<OrderFormDialog> {
     late String city;
     late String state;
     late int zip;
-    late String hash;
+    // late String hash;
     String nameError = '';
     String streetError = '';
     String cityError = '';
@@ -52,108 +52,103 @@ class _OrderFormDialogState extends State<OrderFormDialog> {
     String zipError = '';
     String emailError = '';
 
-    Future<void> purchases(nftId) async {
-      print('555555555555 purchases');
-      var promise = purchaseFrontStart(nftId);
-      promiseToFuture(promise).asStream().listen((value) async {
-        if (value != null && value != Null) {
-          OrderConstructor order = OrderConstructor.fromMap(json.decode(value));
-          // print(
-          //     'OrderConstructor order.tx: ${order.tx.runtimeType} ${order.tx}');
-          // print(
-          //     'OrderConstructor order.witness: ${order.witness.runtimeType} ${order.witness}');
-          http.Response response = await http.post(
-              Uri.parse('https://cdao-mint-tm7praakga-uc.a.run.app/mint'),
-              headers: <String, String>{
-                'Content-Type': 'application/json; charset=UTF-8',
-              },
-              body: jsonEncode(<String, String>{
-                'witness': order.witness as String,
-                'tx': order.tx as String
-              }));
-          print(
-              'http.Response response.body ${response.body.runtimeType} ${response.body}');
-          if (response.statusCode == 200) {
-            MintResponse result =
-                MintResponse.fromMap(json.decode(response.body.toString()));
-            print('MintResponse result ${result.runtimeType} $result');
-            if (result.txhash != null) {
-              print(
-                  'MintResponse result.txhash ${result.txhash.runtimeType} ${result.txhash}');
-              hash = result.txhash as String;
-            } else {
-              print(
-                  'MintResponse result.txhash ${result.error.runtimeType} ${result.error}');
-              hash = 'error';
-              // _err = '${result.error}';
-            }
-            setState(() {});
-            return;
-          } else {
-            hash = 'error';
-            setState(() {});
-            return;
-          }
-        }
-      });
-      return;
-    }
-
     Future<void> getNft() async {
-      print('555555555555 getNft');
       var db = Provider.of<DB>(context, listen: false);
       nft = await db.getNft();
-      print('555555555555 getNft nft.id ${nft.id}');
       setState(() {});
       return;
     }
 
     Future<void> _submitOrderForm() async {
+      late String? hash;
       _isSubmitting = true;
       var firestore = Provider.of<FirestoreService>(context, listen: false);
+      var db = Provider.of<DB>(context, listen: false);
       final isValid = _formKey.currentState!.validate();
       if (isValid) {
         _formKey.currentState!.save();
         await getNft();
-        await purchases(nft.id);
-        if (!hash.contains('error')) {
-          bool dbErr = await firestore.sendOrderForm(
-            name: name,
-            street1: street1,
-            street2: street2,
-            city: city,
-            state: state,
-            zip: zip,
-            email: email,
-            hash: hash,
-            nft: nft.id,
-            // quantity: _quantity
-          );
-          if (dbErr) {
-            print('99999999999999999999 order db entry error $dbErr');
+        var promise = purchaseFrontStart(nft.id);
+        await promiseToFuture(promise).then((value) async {
+          if (value != null && value != Null) {
+            OrderConstructor order =
+                OrderConstructor.fromMap(json.decode(value));
+            http.Response response = await http
+                .post(
+                    Uri.parse('https://cdao-mint-tm7praakga-uc.a.run.app/mint'),
+                    headers: <String, String>{
+                      'Content-Type': 'application/json; charset=UTF-8',
+                    },
+                    body: jsonEncode(<String, String>{
+                      'witness': order.witness as String,
+                      'tx': order.tx as String
+                    }))
+                .then((value) {
+              if (value.statusCode == 200) {
+                MintResponse result =
+                    MintResponse.fromMap(json.decode(value.body.toString()));
+                if (result.txhash != null) {
+                  // print(
+                  //     'MintResponse result.txhash ${result.txhash.runtimeType} ${result.txhash}');
+                  hash = result.txhash as String;
+                } else {
+                  print(
+                      'MintResponse result.txhash ${result.error.runtimeType} ${result.error}');
+                  hash = 'error';
+                  // _err = '${result.error}';
+                }
+                return value;
+              } else {
+                hash = 'error';
+                return value;
+              }
+            });
+          }
+        }).then((v) async {
+          // print('then((v) hash $hash');
+          if (hash != null || !hash!.contains('error')) {
+            // print('if (!hash.contains $hash');
+            bool dbErr = await firestore.sendOrderForm(
+              name: name,
+              street1: street1,
+              street2: street2,
+              city: city,
+              state: state,
+              zip: zip,
+              email: email,
+              hash: hash!,
+              nft: nft.id,
+              // quantity: _quantity
+            );
+            if (dbErr) {
+              print('99999999999999999999 order db entry error');
+              setState(() {
+                _isSubmitting = false;
+                _err =
+                    'Sorry your purchases did not go through please try again.';
+              });
+            } else {
+              await db.updateNft(nft.id);
+              // TODO: reciept page
+              Navigator.pop(context);
+            }
+          } else {
+            print('hash.contains(error))');
             setState(() {
               _isSubmitting = false;
               _err =
                   'Sorry your purchases did not go through please try again.';
             });
-          } else {
-            // TODO: reciept page
-            Navigator.pop(context);
           }
-        } else {
-          setState(() {
-            _isSubmitting = false;
-            _err = 'Sorry your purchases did not go through please try again.';
-          });
-        }
+        });
       } else {
         print('999999999999999999999999999 not valid');
         setState(() {
           _isSubmitting = false;
-          _err =
-              'Sorry your purchases did not go through please try again.';
+          _err = 'Sorry your purchases did not go through please try again.';
         });
       }
+      print('_submitOrderForm done');
     }
 
     bool isNumeric(String s) {
@@ -184,10 +179,10 @@ class _OrderFormDialogState extends State<OrderFormDialog> {
                     _err,
                     style: const TextStyle(color: Colors.red),
                   ),
-                const Text(
-                  'We need a little information for shipping.',
-                  // style: TextStyle(color: Colors.white),
-                ),
+                const Text('We need a little information for shipping.',
+                    textAlign: TextAlign.center
+                    // style: TextStyle(color: Colors.white),
+                    ),
                 //quantity
                 // TextFormField(
                 //   key: const ValueKey('quantity'),
@@ -428,7 +423,7 @@ class _OrderFormDialogState extends State<OrderFormDialog> {
                   //       zipError = '';
                   //     });
                   //     return zipError;
-                  //   }
+                  //   }                    
                   // },
                   decoration: const InputDecoration(
                     labelText: 'Zip Code',
@@ -437,6 +432,7 @@ class _OrderFormDialogState extends State<OrderFormDialog> {
                     zip = int.parse(value!);
                   },
                 ),
+                const SizedBox(height: 12),
                 zipError == ''
                     ? const SizedBox(
                         height: 0,

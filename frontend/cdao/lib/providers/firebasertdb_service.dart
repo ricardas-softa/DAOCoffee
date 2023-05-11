@@ -9,30 +9,35 @@ import '../models/nftsModel.dart';
 
 class DB extends ChangeNotifier {
   final DatabaseReference _db = FirebaseDatabase.instance.ref();
-  // late StreamSubscription<DatabaseEvent> _dbStream;
-  // NftsModel? _db;
-  // NftsModel? get nfts => _db;
+  late StreamSubscription<DatabaseEvent> dblistStream;
+  List<NftsModel>? _nftlist;
+  List<NftsModel>? get nftlist => _nftlist;
 
-  // DB() {
-  //   _listenToNfts();
-  // }
+  DB() {
+    _listenToNfts();
+  }
 
-  // void _listenToNfts() {
-  //   _dbStream = _db.onValue.listen(
-  //     (DatabaseEvent event) {
-  //       setState(() {
-  //         _error = null;
-  //         _counter = (event.snapshot.value ?? 0) as int;
-  //       });
-  //     },
-  //     onError: (Object o) {
-  //       final error = o as FirebaseException;
-  //       setState(() {
-  //         _error = error;
-  //       });
-  //     },
-  //   );
-  // }
+  void _listenToNfts() {
+    dblistStream = _db
+        .child('nft')
+        .orderByChild("available")
+        .equalTo(true)
+        .onValue
+        .listen((event) {
+      try {
+        List<NftsModel>? list = [];
+        Map<dynamic, dynamic> values =
+            event.snapshot.value as Map<dynamic, dynamic>;
+        values.forEach((key, data) {
+          list.add(NftsModel.fromRTDB(data));
+        });
+        _nftlist = list;
+        notifyListeners();
+      } catch (e) {
+        print('_listenToNfts error $e');
+      }
+    });
+  }
 
   Future<NftsModel> getNft() async {
     late NftsModel nftm;
@@ -44,9 +49,9 @@ class DB extends ChangeNotifier {
         .once()
         .then((value) {
       try {
-        Map<dynamic, dynamic> values = value.snapshot.value as Map<dynamic,dynamic>;
+        Map<dynamic, dynamic> values =
+            value.snapshot.value as Map<dynamic, dynamic>;
         values.forEach((key, data) {
-          print('55555555555555 getNft() data $data');
           nftm = NftsModel.fromRTDB(data);
         });
         return nftm;
@@ -66,7 +71,7 @@ class DB extends ChangeNotifier {
     }).onError((error, stackTrace) => print(
         '9999999999999999999999 updateNft update({totalMinted error $error '));
 
-    final event = await _db.child('nfts').child(nftId).update({
+    final event = await _db.child('nft').child(nftId).update({
       'available': false
     }).onError((error, stackTrace) => print(
         '9999999999999999999999 updateNft update({available) error $error '));
@@ -80,8 +85,6 @@ class DB extends ChangeNotifier {
       throw 'getMinted error $error';
     });
     if (snapshot.exists) {
-      print(
-          '55555555555555 getMinted value ${snapshot.value.runtimeType} ${snapshot.value}');
       return snapshot.value as int;
     } else {
       print('55555555555555 getMinted No data available.');

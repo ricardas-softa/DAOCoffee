@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/firebasertdb_service.dart';
 // import '../../../widgets/common/NftGallery/nftGallery.dart';
+import '../../../widgets/common/NftGallery/nftGallery.dart';
 import '../../../widgets/common/orderFormDialog.dart';
 import '../../../widgets/common/title.dart';
 import '../../../widgets/farm/FarmCarasole.dart';
@@ -31,6 +32,7 @@ class _LosHornosScreenState extends State<LosHornosScreen> {
     setState(() {});
     return;
   }
+
   @override
   void initState() {
     super.initState();
@@ -42,6 +44,8 @@ class _LosHornosScreenState extends State<LosHornosScreen> {
     double mWidth = MediaQuery.of(context).size.width;
     double mHeight = MediaQuery.of(context).size.height;
     double boxH = 20;
+    double fontS = 20;
+    double wordSpaceing = 2;
     // final Gradient gradient = LinearGradient(colors: [
     //   // const Color.fromARGB(255, 1, 207, 183),
     //   Colors.orange,
@@ -85,42 +89,52 @@ class _LosHornosScreenState extends State<LosHornosScreen> {
                   ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.all(50.0),
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         // description of the projecct
-                        const Text(
-                          '''CoffeeDAO is an initiative to attach an NFT into each coffee bag sold on our platform. This provides consumers with the origin of the coffee, characteristics of the coffee, and the artistic process used in  the production by the grower. For producers, it creates a record of the consistent quality of their product and a direct link with the coffee drinkers that buy their coffee.''',
-                          textAlign: TextAlign.center,
+                         Container(
+                          // color: Colors.blueGrey,
+                          decoration: const BoxDecoration(
+                            color: Colors.blueGrey,
+                          borderRadius: BorderRadius.all(Radius.circular(20))
                         ),
-                        SizedBox(
-                          height: boxH,
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Column(
+                            children: [
+                              Text(
+                                '''CoffeeDAO is an initiative to attach an NFT with each coffee bag sold on our platform. This provides consumers with the origin of the coffee, characteristics of the coffee, and the artistic process used in  the production by the grower. For producers, it creates a record of the consistent quality of their product and a direct link with the coffee drinkers that buy their coffee.''',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: fontS, height: wordSpaceing),
+                              ),
+                          SizedBox(
+                            height: boxH,
+                          ),
+                           Text(
+                            '''This is a single origin coffee, cultivated 460 feet above sea level, in the mountains of Concepción de Los Hornos, Comayagua, Honduras, by the artisan Mr. Nelvin Humberto Baquis at the Finca "La Casona" and "El Ocotialto". With special care in preparing the land and preserving the environment, using compost, from anaerobic biodigesters and formula for fertilization. The cultivated coffee tree's species are from the Timor and Villa Sarchí families, specifically Parainema as well as other PACA and H-90 species. In the same way, the flowers of the surrounding plants, such as citrus and cherries fruits, are used to favor the coffee unique aroma during the bee pollination process.''',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: fontS, height: wordSpaceing),
+                          ),
+                          SizedBox(
+                            height: boxH,
+                          ),
+                           Text(
+                            '''After individually harvesting the coffee cherries, a manual screening is carried out eliminating natural defects. The pulp is removed and washed in an ordinary case, and then dried at outdoor temperature until reaching an optimal humidity of 11% per batch. Subsequently, the parchment, a natural membrane that covers the bean, is removed and ready for a medium roast. It's important to carefully control the roasting mechanisms maintaining the balance of time by volume of each batch and air to bean ratio, ending with rapid cooling process to preserve the aromas.''',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: fontS, height: wordSpaceing),
+                          ),
+                           Text(
+                            '''This coffee's profile aroma is 84%, a creamy texture with dark sweet chocolate fragrances and mandarin and orange citrus tones. The ways to enjoy your coffee beans varies and it's recommended to keep your samples at a cold temperature and grind it in a suitable mill, just before making the infusion. ''',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: fontS, height: wordSpaceing),
+                          ),
+                            ],
+                          ),
                         ),
-                        const Text(
-                          '''This is a single origin coffee, cultivated 460 feet above sea level, in the mountains of Concepción de Los Hornos, Comayagua, Honduras, by the artisan Mr. Nelvin Humberto Baquis at the Finca "La Casona" and "El Ocotialto". With special care in preparing the land and preserving the environment, using compost, from anaerobic biodigesters and formula for fertilization. The cultivated coffee tree's species are from the Timor and Villa Sarchí families, specifically Parainema as well as other PACA and H-90 species. In the same way, the flowers of the surrounding plants, such as citrus and cherries fruits, are used to favor the coffee unique aroma during the bee pollination process.''',
-                          textAlign: TextAlign.center,
-                        ),
-                        SizedBox(
-                          height: boxH,
-                        ),
-                        const Text(
-                          '''After individually harvesting the coffee cherries, a manual screening is carried out eliminating natural defects. The pulp is removed and washed in an ordinary case, and then dried at outdoor temperature until reaching an optimal humidity of 11% per batch. Subsequently, the parchment, a natural membrane that covers the bean, is removed and ready for a medium roast. It's important to carefully control the roasting mechanisms maintaining the balance of time by volume of each batch and air to bean ratio, ending with rapid cooling process to preserve the aromas.''',
-                          textAlign: TextAlign.center,
-                        ),
-                        const Text(
-                          '''This coffee's profile aroma is 84%, a creamy texture with dark sweet chocolate fragrances and mandarin and orange citrus tones. The ways to enjoy your coffee beans varies and it's recommended to keep your samples at a cold temperature and grind it in a suitable mill, just before making the infusion. ''',
-                          textAlign: TextAlign.center,
-                        ),
-                        SizedBox(
-                          height: boxH,
-                        ),
-                        // TODO: update coffee bag image
-                        Image.asset(
-                          'lib/assets/images/Coffee-Packaging.jpg',
-                          width: mWidth / 5,
-                        ),
+                         ),
                         SizedBox(
                           height: boxH,
                         ),
@@ -132,18 +146,37 @@ class _LosHornosScreenState extends State<LosHornosScreen> {
                         SizedBox(
                           height: boxH,
                         ),
-                        const Text(
-                          '''A NFT & One Pound of Premium Coffee for 45 ADA''',
-                          textAlign: TextAlign.center,
-                        ),
+                        minted == null || minted! >= 5000
+                            ? Text('Nothing to mint today.',
+                          style: TextStyle(fontSize: fontS),)
+                            : const NftGallery(),
                         SizedBox(
                           height: boxH,
                         ),
                         minted == null || minted! >= 5000
-                            ? const Text('Nothing to mint today.')
-                            : const SizedBox(
+                            ? const SizedBox(
                                 height: 0,
-                              ), // TODO: const NftGallery(),
+                              )
+                            : const Text(
+                                '''A Cardano NFT & One Pound of Premium Honduran Coffee for 45 ADA''',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 40),
+                              ),
+                        SizedBox(
+                          height: boxH,
+                        ),
+                        // TODO: update coffee bag image
+                        minted == null || minted! >= 5000
+                            ? const SizedBox(
+                                height: 0,
+                              )
+                            : Image.asset(
+                                'lib/assets/images/Coffee-Packaging.jpg',
+                                width: mWidth / 5,
+                              ),
+                        SizedBox(
+                          height: boxH,
+                        ),
                         minted == null || minted! >= 5000
                             ? const SizedBox(
                                 height: 0,
@@ -166,7 +199,10 @@ class _LosHornosScreenState extends State<LosHornosScreen> {
                                         );
                                       });
                                 },
-                                child: const Text('Purchase')),
+                                child: const Text(
+                                  'BUY NOW',
+                                  style: TextStyle(fontSize: 40),
+                                )),
                         // purchase status field
                         // error message field
                       ]),
