@@ -34,8 +34,8 @@ export async function mintNFT(
   const txObj = lucid.fromTx(tx);
 
   const daoWitness = await txObj.partialSign();
-  const signedTx = txObj.assemble([daoWitness, witness]).complete();
-  const txHash = (await signedTx).submit();
+  const signedTx = await txObj.assemble([daoWitness, witness]).complete();
+  const txHash = await signedTx.submit();
   return { "txHash": txHash };
 }
 
