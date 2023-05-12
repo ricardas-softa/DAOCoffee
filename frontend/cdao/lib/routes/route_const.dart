@@ -6,7 +6,7 @@ class CDAOConstants {
   // static const String farmsRoute = 'farms';
   // static const String farmRoute = 'farm';
   // static const String offeringsRoute = 'offerings';
-  // static const String coffeesRoute = 'coffees';
+  static const String orderRoute = 'order';
   static const String losHornosRoute = 'loshornos';
-  // static const String testFarmRoute = 'testfarm';
+  static const String receiptRoute = 'receipt';
 }

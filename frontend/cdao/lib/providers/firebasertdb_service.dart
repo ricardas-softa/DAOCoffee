@@ -41,6 +41,8 @@ class DB extends ChangeNotifier {
 
   Future<NftsModel> getNft() async {
     late NftsModel nftm;
+    // late String nftm;
+    print('getNFT service');
     await _db
         .child('nft')
         .orderByChild("available")
@@ -53,6 +55,7 @@ class DB extends ChangeNotifier {
             value.snapshot.value as Map<dynamic, dynamic>;
         values.forEach((key, data) {
           nftm = NftsModel.fromRTDB(data);
+          // nftm = data.toString();
         });
         return nftm;
       } catch (e) {

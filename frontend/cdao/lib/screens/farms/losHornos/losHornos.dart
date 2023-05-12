@@ -1,11 +1,15 @@
+import 'dart:convert';
 import 'dart:js_util';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:js/js.dart';
 import 'package:provider/provider.dart';
 
+import '../../../models/nftsModel.dart';
 import '../../../providers/firebasertdb_service.dart';
 // import '../../../widgets/common/NftGallery/nftGallery.dart';
+import '../../../routes/route_const.dart';
 import '../../../widgets/common/NftGallery/nftGallery.dart';
 import '../../../widgets/common/orderFormDialog.dart';
 import '../../../widgets/common/title.dart';
@@ -19,12 +23,8 @@ class LosHornosScreen extends StatefulWidget {
   State<LosHornosScreen> createState() => _LosHornosScreenState();
 }
 
-@JS()
-external purchaseBackStart();
-
 class _LosHornosScreenState extends State<LosHornosScreen> {
   int? minted;
-  late String nft;
 
   Future<void> setup() async {
     var db = Provider.of<DB>(context, listen: false);
@@ -37,6 +37,16 @@ class _LosHornosScreenState extends State<LosHornosScreen> {
   void initState() {
     super.initState();
     setup();
+  }
+
+  Future<String> getNft() async {
+    print('order getNFT ');
+    var db = Provider.of<DB>(context, listen: false);
+    NftsModel nft = await db.getNft();
+    return '''{"id":"${nft.id}", "available": "${nft.available}", "displayURL": "${nft.displayURL}", "ipfsUrl": "${nft.ipfsUrl}"}''';
+    // return await db.getNft();
+    // setState(() {});
+    // return nft.toString();
   }
 
   @override
@@ -95,46 +105,50 @@ class _LosHornosScreenState extends State<LosHornosScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         // description of the projecct
-                         Container(
+                        Container(
                           // color: Colors.blueGrey,
                           decoration: const BoxDecoration(
-                            color: Colors.blueGrey,
-                          borderRadius: BorderRadius.all(Radius.circular(20))
+                              color: Colors.blueGrey,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20))),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Column(
+                              children: [
+                                Text(
+                                  '''CoffeeDAO is an initiative to attach an NFT with each coffee bag sold on our platform. This provides consumers with the origin of the coffee, characteristics of the coffee, and the artistic process used in  the production by the grower. For producers, it creates a record of the consistent quality of their product and a direct link with the coffee drinkers that buy their coffee.''',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: fontS, height: wordSpaceing),
+                                ),
+                                SizedBox(
+                                  height: boxH,
+                                ),
+                                Text(
+                                  '''This is a single origin coffee, cultivated 460 feet above sea level, in the mountains of Concepción de Los Hornos, Comayagua, Honduras, by the artisan Mr. Nelvin Humberto Baquis at the Finca "La Casona" and "El Ocotialto". With special care in preparing the land and preserving the environment, using compost, from anaerobic biodigesters and formula for fertilization. The cultivated coffee tree's species are from the Timor and Villa Sarchí families, specifically Parainema as well as other PACA and H-90 species. In the same way, the flowers of the surrounding plants, such as citrus and cherries fruits, are used to favor the coffee unique aroma during the bee pollination process.''',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: fontS, height: wordSpaceing),
+                                ),
+                                SizedBox(
+                                  height: boxH,
+                                ),
+                                Text(
+                                  '''After individually harvesting the coffee cherries, a manual screening is carried out eliminating natural defects. The pulp is removed and washed in an ordinary case, and then dried at outdoor temperature until reaching an optimal humidity of 11% per batch. Subsequently, the parchment, a natural membrane that covers the bean, is removed and ready for a medium roast. It's important to carefully control the roasting mechanisms maintaining the balance of time by volume of each batch and air to bean ratio, ending with rapid cooling process to preserve the aromas.''',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: fontS, height: wordSpaceing),
+                                ),
+                                Text(
+                                  '''This coffee's profile aroma is 84%, a creamy texture with dark sweet chocolate fragrances and mandarin and orange citrus tones. The ways to enjoy your coffee beans varies and it's recommended to keep your samples at a cold temperature and grind it in a suitable mill, just before making the infusion. ''',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: fontS, height: wordSpaceing),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Column(
-                            children: [
-                              Text(
-                                '''CoffeeDAO is an initiative to attach an NFT with each coffee bag sold on our platform. This provides consumers with the origin of the coffee, characteristics of the coffee, and the artistic process used in  the production by the grower. For producers, it creates a record of the consistent quality of their product and a direct link with the coffee drinkers that buy their coffee.''',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: fontS, height: wordSpaceing),
-                              ),
-                          SizedBox(
-                            height: boxH,
-                          ),
-                           Text(
-                            '''This is a single origin coffee, cultivated 460 feet above sea level, in the mountains of Concepción de Los Hornos, Comayagua, Honduras, by the artisan Mr. Nelvin Humberto Baquis at the Finca "La Casona" and "El Ocotialto". With special care in preparing the land and preserving the environment, using compost, from anaerobic biodigesters and formula for fertilization. The cultivated coffee tree's species are from the Timor and Villa Sarchí families, specifically Parainema as well as other PACA and H-90 species. In the same way, the flowers of the surrounding plants, such as citrus and cherries fruits, are used to favor the coffee unique aroma during the bee pollination process.''',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: fontS, height: wordSpaceing),
-                          ),
-                          SizedBox(
-                            height: boxH,
-                          ),
-                           Text(
-                            '''After individually harvesting the coffee cherries, a manual screening is carried out eliminating natural defects. The pulp is removed and washed in an ordinary case, and then dried at outdoor temperature until reaching an optimal humidity of 11% per batch. Subsequently, the parchment, a natural membrane that covers the bean, is removed and ready for a medium roast. It's important to carefully control the roasting mechanisms maintaining the balance of time by volume of each batch and air to bean ratio, ending with rapid cooling process to preserve the aromas.''',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: fontS, height: wordSpaceing),
-                          ),
-                           Text(
-                            '''This coffee's profile aroma is 84%, a creamy texture with dark sweet chocolate fragrances and mandarin and orange citrus tones. The ways to enjoy your coffee beans varies and it's recommended to keep your samples at a cold temperature and grind it in a suitable mill, just before making the infusion. ''',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: fontS, height: wordSpaceing),
-                          ),
-                            ],
-                          ),
-                        ),
-                         ),
                         SizedBox(
                           height: boxH,
                         ),
@@ -147,9 +161,33 @@ class _LosHornosScreenState extends State<LosHornosScreen> {
                           height: boxH,
                         ),
                         minted == null || minted! >= 5000
-                            ? Text('Nothing to mint today.',
-                          style: TextStyle(fontSize: fontS),)
-                            : const NftGallery(),
+                            ? Text(
+                                'Nothing to mint today.',
+                                style: TextStyle(fontSize: fontS),
+                              )
+                            : Column(
+                              children: const [
+                                Text('''Los Hornos NFT's''',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.orange,
+                                    fontSize: 60),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Text('''The NFT originals do not have the NFTDAO watermark.''',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                NftGallery(),
+                              ],
+                            ),
                         SizedBox(
                           height: boxH,
                         ),
@@ -183,21 +221,34 @@ class _LosHornosScreenState extends State<LosHornosScreen> {
                               )
                             : ElevatedButton(
                                 onPressed: () async {
-                                  await showDialog(
-                                      context: context,
-                                      builder: (_) {
-                                        return Dialog(
-                                          backgroundColor: Colors.black,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                          ),
-                                          child: SizedBox(
-                                              height: mHeight,
-                                              width: mWidth / 3,
-                                              child: const OrderFormDialog()),
-                                        );
-                                      });
+                                  getNft().then((value) {
+                                    print(
+                                        '5555555555555555 value ${value.runtimeType} ${value.toString()} ');
+                                    context.goNamed(CDAOConstants.orderRoute,
+                                        params: {"nftm": value});
+                                    // Navigator.of(context).popAndPushNamed('/order', arguments: value);
+                                    // GoRouter.of(context).go('/order', extra: value);
+                                    // try {
+                                    // context.goNamed("/order", params: value.toMap(NftsModel(id: value.id, available: value.available, displayURL: value.displayURL, ipfsUrl: ipfsUrl)) as Map<String, String>);} catch (e) {
+                                    //   print(' get error $e');
+                                    // }
+                                  });
+
+                                  // await showDialog(
+                                  //     context: context,
+                                  //     builder: (_) {
+                                  //       return Dialog(
+                                  //         backgroundColor: Colors.black,
+                                  //         shape: RoundedRectangleBorder(
+                                  //           borderRadius:
+                                  //               BorderRadius.circular(20),
+                                  //         ),
+                                  //         child: SizedBox(
+                                  //             height: mHeight,
+                                  //             width: mWidth / 3,
+                                  //             child: const OrderFormDialog()),
+                                  //       );
+                                  //     });
                                 },
                                 child: const Text(
                                   'BUY NOW',

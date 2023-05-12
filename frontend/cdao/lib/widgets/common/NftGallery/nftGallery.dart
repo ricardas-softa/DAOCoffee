@@ -24,11 +24,11 @@ class _NftGalleryState extends State<NftGallery> {
     await updateNFT(db.nftlist);
   }
 
-  @override
-  void initState() {
-    super.initState();
-    inni();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   inni();
+  // }
 
   Future<void> updateNFT(List<NftsModel>? list) async {
     double width = MediaQuery.of(context).size.width;
@@ -43,7 +43,7 @@ class _NftGalleryState extends State<NftGallery> {
         imageSliders.add(Image.network(urlImages[i], width: width / 2));
       }
       loading = false;
-      setState(() {});
+      // setState(() {});
       return;
     } else {
       List<String> tmp = [];
@@ -62,7 +62,7 @@ class _NftGalleryState extends State<NftGallery> {
         }
       }
       loading = false;
-      setState(() {});
+      // setState(() {});
       return;
     }
   }

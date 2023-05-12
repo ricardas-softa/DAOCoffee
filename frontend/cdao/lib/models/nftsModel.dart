@@ -19,27 +19,27 @@ class NftsModel {
     data["ipfsUrl"] = nft.ipfsUrl;
     return data;
   }
-
+  
   NftsModel.fromRTDB(nft) {
     try {
       id = nft["id"];
     } catch (e) {
-      print('55555555555555555 NftsModel.fromRTDB id ${nft["id"].toString()} error $e');
+      print('55555555555555555 NftsModel.fromRTDB id ${nft["id"]} error $e');
     }
     try {
       available = nft["available"];
     } catch (e) {
-      print('55555555555555555 NftsModel.fromRTDB available ${nft["ipavailablefsUrl"].toString()} error $e');
+      print('55555555555555555 NftsModel.fromRTDB available ${nft["ipavailablefsUrl"]} error $e');
     }
     try {
       displayURL = nft["displayURL"];
     } catch (e) {
-      print('55555555555555555 NftsModel.fromRTDB displayURL ${nft["displayURL"].toString()} error $e');
+      print('55555555555555555 NftsModel.fromRTDB displayURL ${nft["displayURL"]} error $e');
     }
     try {
       ipfsUrl = nft["ipfsUrl"];
     } catch (e) {
-      print('55555555555555555 NftsModel.fromRTDB ipfsUrl ${nft["ipfsUrl"].toString()} error $e');
+      print('55555555555555555 NftsModel.fromRTDB ipfsUrl ${nft["ipfsUrl"]} error $e');
     }
   }
 }

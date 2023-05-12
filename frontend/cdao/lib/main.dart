@@ -93,10 +93,10 @@ class CDAO extends StatelessWidget {
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
-        // routerConfig: CDAORouter.returnRouter(),
-        routeInformationParser:
-            CDAORouter.returnRouter().routeInformationParser,
-        routerDelegate: CDAORouter.returnRouter().routerDelegate,
+        routerConfig: CDAORouter.returnRouter(),
+        // routeInformationParser:
+        //     CDAORouter.returnRouter().routeInformationParser,
+        // routerDelegate: CDAORouter.returnRouter().routerDelegate,
         title: 'Coffee DAO',
         theme: themeData,
       )

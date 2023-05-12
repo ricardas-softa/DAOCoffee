@@ -43,7 +43,6 @@ class _FarmHeaderState extends State<FarmHeader> {
     return ! loaded 
       ? const CircularProgressIndicator()
       : Stack(
-        fit: StackFit.loose,
         children: <Widget>[
           Container(
             alignment: Alignment.center,
@@ -90,7 +89,7 @@ class _FarmHeaderState extends State<FarmHeader> {
                           fontSize: mWidth < 753 ? 40 : mWidth < 1225 && mWidth >= 753 ? 60 : 100),
                     ),
                   ),
-                  SizedBox(height: mWidth/8*3,),
+                  SizedBox(height: mWidth/4*2,),
                   Text('''Comayagua, Honduras''',
                       textAlign: TextAlign.center,
                       style: TextStyle(
