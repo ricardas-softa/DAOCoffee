@@ -21,25 +21,9 @@ class NftsModel {
   }
   
   NftsModel.fromRTDB(nft) {
-    try {
-      id = nft["id"];
-    } catch (e) {
-      print('55555555555555555 NftsModel.fromRTDB id ${nft["id"]} error $e');
-    }
-    try {
-      available = nft["available"];
-    } catch (e) {
-      print('55555555555555555 NftsModel.fromRTDB available ${nft["ipavailablefsUrl"]} error $e');
-    }
-    try {
-      displayURL = nft["displayURL"];
-    } catch (e) {
-      print('55555555555555555 NftsModel.fromRTDB displayURL ${nft["displayURL"]} error $e');
-    }
-    try {
-      ipfsUrl = nft["ipfsUrl"];
-    } catch (e) {
-      print('55555555555555555 NftsModel.fromRTDB ipfsUrl ${nft["ipfsUrl"]} error $e');
-    }
+    id = nft["id"];
+    available = nft["available"];
+    displayURL = nft["displayURL"];
+    ipfsUrl = nft["ipfsUrl"];
   }
 }

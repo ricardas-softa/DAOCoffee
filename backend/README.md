@@ -34,3 +34,4 @@ deno run --allow-net --allow-env --allow-read index.ts
 ```bash
 curl -X POST -H "Content-Type: application/json" -d '{"name": "My NFT", "imagePath": "/path/to/image.png"}' http://localhost:8000/mint
 ```
+

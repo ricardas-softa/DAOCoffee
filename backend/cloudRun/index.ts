@@ -21,11 +21,3 @@ app.use(router.routes());
 app.use(router.allowedMethods());
 
 await app.listen({ port: 8000 });
-
-// Run the server with:
-// deno run --allow-net --allow-env --allow-read index.ts
-
-// To test the server, run:
-// curl -X POST -H "Content-Type: application/json" -d '{"name": "My NFT", "imagePath": "/path/to/image.png"}' http://localhost:8000/mint
-
-

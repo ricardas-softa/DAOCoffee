@@ -1,21 +1,10 @@
 import {
           Blockfrost,
           Lucid,
-          // MintingPolicy,
-          // Unit,
-          // PolicyId,
           TxHash,
-          // fromHex,
-          // toHex,
-          // fromText,
-          // cbor,
-          // Data,
-          // Constr,
           TransactionWitnesses
         } from "./deps.ts";
 import { 
-  // PINATA_API_KEY, 
-  // PINATA_SECRET_KEY, 
   BLOCKFROST_PROJ, MNEMONIC, 
   // DAO_ADDRESS 
 } from "./env.ts";
@@ -26,7 +15,7 @@ const lucid = await Lucid.new(
 );
 
 // Select the wallet from the mnemonic
-const mnemonic = MNEMONIC
+const mnemonic = MNEMONIC;
 lucid.selectWalletFromSeed(mnemonic);
 
 export async function mintNFT(

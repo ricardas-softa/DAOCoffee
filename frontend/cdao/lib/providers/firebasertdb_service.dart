@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:math';
 
 import 'package:firebase_database/firebase_database.dart';
@@ -55,7 +54,6 @@ class DB extends ChangeNotifier {
             value.snapshot.value as Map<dynamic, dynamic>;
         values.forEach((key, data) {
           nftm = NftsModel.fromRTDB(data);
-          // nftm = data.toString();
         });
         return nftm;
       } catch (e) {
@@ -105,7 +103,7 @@ class DB extends ChangeNotifier {
 
   @override
   void dispose() {
-    // _nftStream.cancel();
+    dblistStream.cancel();
     super.dispose();
   }
 }

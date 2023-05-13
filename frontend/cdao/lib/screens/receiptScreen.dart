@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -23,7 +22,6 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
   String url = 'https://preprod.cardanoscan.io/transaction/';
 
   Future<void> inni() async {
-    print('55555555receipt inni');
     param = await json.decode(widget.data);
     loading = false;
     setState(() {});
@@ -122,7 +120,7 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
                             context.goNamed(CDAOConstants.losHornosRoute);
                           },
                           child: const Text(
-                            '''Want More NFT's and Coffee?''',
+                            '''More NFT's & Coffee?''',
                             textAlign: TextAlign.center,
                             style: TextStyle(fontSize: 20),
                           ))

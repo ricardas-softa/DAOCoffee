@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:cdao/providers/firebasertdb_service.dart';
 import 'package:cdao/providers/firestore_service.dart';
 import 'package:cdao/providers/storage_service.dart';
@@ -7,7 +5,6 @@ import 'package:cdao/routes/route_config.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-// ignore: depend_on_referenced_packages
 import 'package:flutter_web_plugins/url_strategy.dart';
 
 void main() async {
@@ -94,9 +91,6 @@ class CDAO extends StatelessWidget {
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         routerConfig: CDAORouter.returnRouter(),
-        // routeInformationParser:
-        //     CDAORouter.returnRouter().routeInformationParser,
-        // routerDelegate: CDAORouter.returnRouter().routerDelegate,
         title: 'Coffee DAO',
         theme: themeData,
       )

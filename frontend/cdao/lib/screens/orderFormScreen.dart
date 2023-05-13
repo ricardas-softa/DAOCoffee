@@ -23,7 +23,7 @@ import '../widgets/common/title.dart';
 
 class OrderFormScreen extends StatefulWidget {
   final String nftm;
-  OrderFormScreen({required this.nftm, super.key});
+  const OrderFormScreen({required this.nftm, super.key});
 
   @override
   State<OrderFormScreen> createState() => _OrderFormScreenState();
@@ -100,7 +100,7 @@ class _OrderFormScreenState extends State<OrderFormScreen> {
           if (value != null && value != Null) {
             OrderConstructor order =
                 OrderConstructor.fromMap(json.decode(value));
-            http.Response response = await http
+            await http
                 .post(
                     Uri.parse('https://cdao-mint-tm7praakga-uc.a.run.app/mint'),
                     headers: <String, String>{
@@ -115,14 +115,9 @@ class _OrderFormScreenState extends State<OrderFormScreen> {
                 MintResponse result =
                     MintResponse.fromMap(json.decode(value.body.toString()));
                 if (result.txhash != null) {
-                  // print(
-                  //     'MintResponse result.txhash ${result.txhash.runtimeType} ${result.txhash}');
                   hash = result.txhash as String;
                 } else {
-                  print(
-                      'MintResponse result.txhash ${result.error.runtimeType} ${result.error}');
                   hash = 'error';
-                  // _err = '${result.error}';
                 }
                 return value;
               } else {
@@ -132,9 +127,7 @@ class _OrderFormScreenState extends State<OrderFormScreen> {
             });
           }
         }).then((v) async {
-          // print('then((v) hash $hash');
           if (hash != null || !hash!.contains('error')) {
-            // print('if (!hash.contains $hash');
             bool dbErr = await firestore.sendOrderForm(
               name: name,
               street1: street1,
@@ -159,15 +152,6 @@ class _OrderFormScreenState extends State<OrderFormScreen> {
             } else {
               await db.updateNft(nft!.id);
               return {'hash': hash, 'nftUrl': nft!.ipfsUrl};
-              // context.push('/receipt',
-              //     extra: {'hash': hash, 'nftUrl': nft.ipfsUrl});
-              // GoRouter.of(context)
-              //     .go('/receipt', extra: {'hash': hash, 'nftUrl': nft.ipfsUrl});
-              // Navigator.of(context).push(
-              //   MaterialPageRoute(
-              //     builder: (context) => ReceiptScreen(hash: hash!, nftUrl: nft.ipfsUrl,),
-              //   ),
-              // );
             }
           } else {
             print('hash.contains(error))');
@@ -180,7 +164,6 @@ class _OrderFormScreenState extends State<OrderFormScreen> {
         _err = 'Sorry your purchases did not go through please try again.';
         hash = _err;
       }
-      print('_submitOrderForm done');
       if (hash == _err) {
         _isSubmitting = false;
         return {'error': _err};
@@ -518,14 +501,8 @@ class _OrderFormScreenState extends State<OrderFormScreen> {
                         ? const CircularProgressIndicator()
                         : ElevatedButton(
                             onPressed: () async {
-                            //   String x = '''{"hash": "b4427e3629c4e8a0589e256f548a6c70a8d5851248f461d0de00632ee4195f67", "nftUrl": "ipfs://QmNjdwopKry7LniYEDRH8jeERHeTbbccqa9VfAFNUGMj8S"}''';
-                            //   context.goNamed(CDAOConstants.receiptRoute,
-                            //       params: {"data": x});
-                            
                               await _submitOrderForm().then((value) {
-                                print('going to receipt value $value');
                                 String x = '''{"hash": ${value['hash']}, "nftUrl": "${value['nftUrl']}"}''';
-                                print('x $x');
                                 context.goNamed(CDAOConstants.receiptRoute,
                                     params: {"data": x});
                               });

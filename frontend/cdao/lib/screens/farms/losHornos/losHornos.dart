@@ -1,17 +1,11 @@
-import 'dart:convert';
-import 'dart:js_util';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:js/js.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/nftsModel.dart';
 import '../../../providers/firebasertdb_service.dart';
-// import '../../../widgets/common/NftGallery/nftGallery.dart';
 import '../../../routes/route_const.dart';
 import '../../../widgets/common/NftGallery/nftGallery.dart';
-import '../../../widgets/common/orderFormDialog.dart';
 import '../../../widgets/common/title.dart';
 import '../../../widgets/farm/FarmCarasole.dart';
 import '../../../widgets/farm/farmHeader.dart';
@@ -40,27 +34,17 @@ class _LosHornosScreenState extends State<LosHornosScreen> {
   }
 
   Future<String> getNft() async {
-    print('order getNFT ');
     var db = Provider.of<DB>(context, listen: false);
     NftsModel nft = await db.getNft();
     return '''{"id":"${nft.id}", "available": "${nft.available}", "displayURL": "${nft.displayURL}", "ipfsUrl": "${nft.ipfsUrl}"}''';
-    // return await db.getNft();
-    // setState(() {});
-    // return nft.toString();
   }
 
   @override
   Widget build(BuildContext context) {
     double mWidth = MediaQuery.of(context).size.width;
-    double mHeight = MediaQuery.of(context).size.height;
     double boxH = 20;
     double fontS = 20;
     double wordSpaceing = 2;
-    // final Gradient gradient = LinearGradient(colors: [
-    //   // const Color.fromARGB(255, 1, 207, 183),
-    //   Colors.orange,
-    //   Colors.red.shade900,
-    // ]);
     return Consumer<DB>(builder: (context, db, child) {
       return Scaffold(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -222,40 +206,14 @@ class _LosHornosScreenState extends State<LosHornosScreen> {
                             : ElevatedButton(
                                 onPressed: () async {
                                   getNft().then((value) {
-                                    print(
-                                        '5555555555555555 value ${value.runtimeType} ${value.toString()} ');
                                     context.goNamed(CDAOConstants.orderRoute,
                                         params: {"nftm": value});
-                                    // Navigator.of(context).popAndPushNamed('/order', arguments: value);
-                                    // GoRouter.of(context).go('/order', extra: value);
-                                    // try {
-                                    // context.goNamed("/order", params: value.toMap(NftsModel(id: value.id, available: value.available, displayURL: value.displayURL, ipfsUrl: ipfsUrl)) as Map<String, String>);} catch (e) {
-                                    //   print(' get error $e');
-                                    // }
                                   });
-
-                                  // await showDialog(
-                                  //     context: context,
-                                  //     builder: (_) {
-                                  //       return Dialog(
-                                  //         backgroundColor: Colors.black,
-                                  //         shape: RoundedRectangleBorder(
-                                  //           borderRadius:
-                                  //               BorderRadius.circular(20),
-                                  //         ),
-                                  //         child: SizedBox(
-                                  //             height: mHeight,
-                                  //             width: mWidth / 3,
-                                  //             child: const OrderFormDialog()),
-                                  //       );
-                                  //     });
                                 },
                                 child: const Text(
                                   'BUY NOW',
                                   style: TextStyle(fontSize: 40),
                                 )),
-                        // purchase status field
-                        // error message field
                       ]),
                 ),
               ],
@@ -264,6 +222,3 @@ class _LosHornosScreenState extends State<LosHornosScreen> {
     });
   }
 }
-// TODO: User order status
-// TODO: User NFT Viewer
-// TODO: User Managment
