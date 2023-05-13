@@ -23,7 +23,7 @@ Obfuscate the lucidFunc
 
 
 # Contract
-
+The minting policy is written with Aiken and checks that the mint happens before the deadline, is paid for, has permission from the app, and is minting a single NFT.
 
 # Frontend
 The frontend is written in Dart/Flutter using a dart/js interop service worker to use the Lucid js package. The lucid service worker can be found at frontend/cdao/web/lucidFunc.js
