@@ -77,16 +77,6 @@ class _OrderFormScreenState extends State<OrderFormScreen> {
     String zipError = '';
     String emailError = '';
 
-    // Future<void> getNft() async {
-    //   print('order getNFT context ${context.runtimeType}');
-    //   var db = Provider.of<DB>(context, listen: false);
-    //   nft = await db.getNft();
-    //   print('order getNFT nft $nft');
-    //   loading = false;
-    //   setState(() {});
-    //   return;
-    // }
-
     Future<Map<String, String>> _submitOrderForm() async {
       late String? hash;
       _isSubmitting = true;
@@ -145,26 +135,29 @@ class _OrderFormScreenState extends State<OrderFormScreen> {
               setState(() {
                 _isSubmitting = false;
                 _err =
-                    'Sorry your purchases did not go through please try again.';
+                    '''Sorry your purchases did not get recorded. Please reach out to us.''';
               });
-              hash = _err;
-              return {'error': _err};
+              await db.incrementSold(1);
+              return {'hash': hash, 'nftUrl': nft!.ipfsUrl};
             } else {
-              await db.updateNft(nft!.id);
+              await db.incrementSold(1);
               return {'hash': hash, 'nftUrl': nft!.ipfsUrl};
             }
           } else {
+            await db.updateNft(nft!.id, true);
             print('hash.contains(error))');
             _isSubmitting = false;
             _err = 'Sorry your purchases did not go through please try again.';
           }
         });
       } else {
+        await db.updateNft(nft!.id, true);
         print('999999999999999999999999999 not valid');
         _err = 'Sorry your purchases did not go through please try again.';
         hash = _err;
       }
       if (hash == _err) {
+        await db.updateNft(nft!.id, true);
         _isSubmitting = false;
         return {'error': _err};
       } else {

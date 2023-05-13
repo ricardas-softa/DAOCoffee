@@ -36,6 +36,7 @@ class _LosHornosScreenState extends State<LosHornosScreen> {
   Future<String> getNft() async {
     var db = Provider.of<DB>(context, listen: false);
     NftsModel nft = await db.getNft();
+    await db.updateNft(nft.id, false);
     return '''{"id":"${nft.id}", "available": "${nft.available}", "displayURL": "${nft.displayURL}", "ipfsUrl": "${nft.ipfsUrl}"}''';
   }
 

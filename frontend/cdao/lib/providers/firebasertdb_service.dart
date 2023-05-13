@@ -66,14 +66,17 @@ class DB extends ChangeNotifier {
     return nftm;
   }
 
-  Future<void> updateNft(nftId) async {
+  Future<void> incrementSold(int amount) async {
     await _db.update({
-      'totalMinted': ServerValue.increment(1),
+      'totalMinted': ServerValue.increment(amount),
     }).onError((error, stackTrace) => print(
         '9999999999999999999999 updateNft update({totalMinted error $error '));
+    return;
+  }
 
+  Future<void> updateNft(nftId, bool b) async {
     final event = await _db.child('nft').child(nftId).update({
-      'available': false
+      'available': b
     }).onError((error, stackTrace) => print(
         '9999999999999999999999 updateNft update({available) error $error '));
     return;
